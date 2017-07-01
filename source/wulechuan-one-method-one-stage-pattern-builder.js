@@ -124,11 +124,11 @@
  * 
  * 
  * 		function methodAsStage1() {
- * 			// your actions here
+ * 			// your statements go here
  * 		}
  * 
  * 		function shoot() {
- * 			// your actions here
+ * 			// your statements go here
  * 		}
  * 	}
  * 
@@ -143,9 +143,6 @@
  * 
  * 	firstSoldier.第一步(); // In English, this should have been firstSoldier.prepare();
  * 
- * 	// Note that: firstSoldier === firstSoldier.第一步(),
- * 	// because non-terminal stage methods return the decorared object itself.
- * 
  * 	// From now on, the three aliases for the "methodAsStage1"
  * 	// are hidden (removed from the instance), since the stage1 is now a past stage.
  * 	// while the three aliases for the "shoot" function are available now.
@@ -153,8 +150,13 @@
  * 	// If below were in English: var killedEnemies = firstSoldier.shoot();
  * 	var killedEnemies = firstSoldier.发射子弹();
  * 
+ * 
+ * 	## Chaining invocations:
+ * 
+ * 	// Note that: firstSoldier === firstSoldier.第一步(),
+ * 	// because non-terminal stage methods return the decorared object itself.
+ * 
  * @example:
- * 	// Chaining invocations:
  * 	var secondSoldier = new Soldier;
  * 
  * 	// If below were in English: var killedEnemiesBySecondSoldier = secondSoldier.getReady().fire();

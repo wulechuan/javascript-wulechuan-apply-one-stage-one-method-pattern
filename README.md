@@ -100,6 +100,8 @@ to decorate each and every instance of the later class.
 
 # 较完整的范例（An Example）
 
+## 基本用法 (Basics)
+
 	function Soldier() {
 
 		var stagesBuilder = new WulechuanApplyOneStageOneMethodProgrammingPatternFor(this);
@@ -122,38 +124,53 @@ to decorate each and every instance of the later class.
 
 
 		function methodAsStage1() {
-			// your actions here
+			// your statements go here
 		}
 
 		function shoot() {
-			// your actions here
+			// your statements go here
 		}
 	}
 
 	var firstSoldier = new Soldier;
 	
-	// Now the "firstSoldier" object has only those methods
-	// which are mapped onto the "methodAsStage1" function,
-	// in all three Chinese aliases, of course,
-	// since the usingLanguage has been set to 'zh-CN'.
-	// Those which are mapped onto the "shoot" function
-	// is *NOT* available at this time.
+Now the "firstSoldier" object has only those methods
+which are mapped onto the "methodAsStage1" function,
+in all three Chinese aliases, of course,
+since the usingLanguage has been set to 'zh-CN'.
+Those which are mapped onto the "shoot" function
+is *NOT* available at this time.
 
-	firstSoldier.第一步(); // In English, this should have been firstSoldier.prepare();
+	firstSoldier.第一步();
+	// In English, this should have been:
+	// firstSoldier.prepare();
 
-	// Note that: firstSoldier === firstSoldier.第一步(),
-	// because non-terminal stage methods return the decorared object itself.
+From now on, the three aliases for the "methodAsStage1"
+are hidden (removed from the instance), since the stage1 is now a past stage.
+while the three aliases for the "shoot" function are available now.
 
-	// From now on, the three aliases for the "methodAsStage1"
-	// are hidden (removed from the instance), since the stage1 is now a past stage.
-	// while the three aliases for the "shoot" function are available now.
+If below were in English: var killedEnemies = firstSoldier.shoot();
 
-	// If below were in English: var killedEnemies = firstSoldier.shoot();
 	var killedEnemies = firstSoldier.发射子弹();
 
-Chaining invocations:
+
+## 链式调用 (Chaining invocations)
+
+Note that: 
+
+	firstSoldier === firstSoldier.第一步() // true
+	firstSoldier === firstSoldier.prepare() // true
+	firstSoldier === firstSoldier.getReady() // true
+	.
+	.
+	.
+
+because non-terminal stage methods return the decorared object itself.
+
+So we can also do this:
 
 	var secondSoldier = new Soldier;
 
-	// If below were in English: var killedEnemiesBySecondSoldier = secondSoldier.getReady().fire();
+	// If below were in English:
+	// var killedEnemiesBySecondSoldier = secondSoldier.getReady().fire();
 	var 被打死的敌人 = secondSoldier.预备().开火！();

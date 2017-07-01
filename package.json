@@ -1,0 +1,23 @@
+{
+  "name": "@wulechuan/apply-one-stage-one-method-pattern",
+  "version": "1.0.0",
+  "description": "",
+  "main": "build/wulechuan-one-method-one-stage-pattern-builder.min.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "staged",
+    "chaining-invokation",
+    "natural-language-like"
+  ],
+  "author": "吴乐川",
+  "license": "ISC",
+  "devDependencies": {
+    "del": "^3.0.0",
+    "gulp-rename": "^1.2.2",
+    "gulp-sequence": "^0.4.6",
+    "gulp-uglify": "^3.0.0",
+    "pump": "^1.0.2"
+  }
+}

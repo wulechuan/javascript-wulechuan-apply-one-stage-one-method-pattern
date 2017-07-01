@@ -98,7 +98,7 @@ inside of the invokaction chain scopes.
 Usually you want to use an instance of this helper class inside another class,
 to decorate each and every instance of the later class.
 
-# 较完整的范例（An Example）
+# 较完整的范例（Examples）
 
 ## 基本用法 (Basics)
 

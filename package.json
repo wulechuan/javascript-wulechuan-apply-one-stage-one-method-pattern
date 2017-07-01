@@ -1,6 +1,6 @@
 {
   "name": "@wulechuan/apply-one-stage-one-method-pattern",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "",
   "main": "build/wulechuan-one-method-one-stage-pattern-builder.min.js",
   "scripts": {

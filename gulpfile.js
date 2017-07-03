@@ -72,6 +72,12 @@ const pump = require('pump');
 				.replace(/^\n*/, '')
 				;
 
+			readMeContentSnippetInThisFile += [
+				'# API',
+				'',
+				'See: [API](API.md).'
+			].join('\n');
+
 			return readMeContentSnippetInThisFile;
 		}
 	});

@@ -195,4 +195,6 @@ So we can also do this:
 	// var killedEnemiesBySecondSoldier = secondSoldier.getReady().fire();
 
 
- 
+ # API
+
+See: [API](API.md).

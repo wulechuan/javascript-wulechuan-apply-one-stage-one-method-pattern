@@ -1,13 +1,14 @@
 /**
  * @author 吴乐川 <wulechuan@live.com>
  * 
- * -----
+ * ----- readme start -----
  * 
  * # 中文介绍
  * 
  * 凡由本辅助类构建的实例对象，可用于将本人设计的一种程序设计模式应用至另一“受体”对象。
  * “受体”因而被改造，其各个所涉及之方法函数均被依次对应于各自的所谓“执行阶段”，亦可称“步骤”，
- * 每个方法函数对应一个步骤。自此时起，仅第一个步骤所对应的方法函数被公开（或称“曝露”），
+ * 每个方法函数对应一个步骤。
+ * 自此时起，仅第一个步骤所对应的方法函数被公开（或称“曝露”），
  * 其余后续步骤之方法函数均被隐藏，直至各自前导执行阶段完成，这些方法函数才会陆续公开。
  * 
  * 任何“步骤，凡非最终者，其对应之方法函数均返回“受体”对象本身，以实现对其各个方法函数的链式调用；
@@ -22,8 +23,7 @@
  * 	设有“步骤丙”、“步骤丁”及“步骤戊”三者，其中丁为“可省略”步骤，其余两者为“必经”步骤。
  * 	则，当丙结束时，非但代表丁的方法函数会被曝露，戊之对应方法函数亦会一同被曝露。
  * 
- * 一言以蔽之，大体上，不执行完早期方法函数，则后续方法函数是隐藏的，无从执行。
- * 据此，各个方法之调用次序无从违背。
+ * 一言以蔽之，大体上，不执行完早期方法函数，则后续方法函数是隐藏的，无从执行。据此，各个方法之调用次序无从违背。
  * 
  * 此番改造之根本目的在于，将传统的形如：“
  * @example
@@ -55,7 +55,7 @@
  * 完全可以为其构建多条执行路线，而不仅限于一条。
  * 由于执行线路不可中断，否则无从返回结果；
  * 何况每当从新的“路线”之首个阶段开始执行时，执行“现状”会被重新配置，没有干扰。
- * 因此，多条执行线路不会互相干涉，即便它们共用某些方法。
+ * 因此，多条执行线路不会互相干涉，即便它们共用某些方法函数。
  * 
  * 
  * 
@@ -122,8 +122,9 @@
  * 
  * 
  * 
- * # 范例 (Examples)
+ * # 较完整的范例 (Examples)
  * 
+ * ## 基本用法 (Basics)
  * @example
  * 	function Soldier() {
  * 
@@ -164,7 +165,9 @@
  * Those which are mapped onto the "shoot" function
  * is *NOT* available at this time.
  * @example
- * 	firstSoldier.第一步(); // In English, this should have been firstSoldier.prepare();
+ * 	firstSoldier.第一步();
+ * 	// In English, this should have been:
+ * 	// firstSoldier.prepare();
  * 
  * From now on, the three aliases for the "methodAsStage1"
  * are hidden (removed from the instance), since the stage1 is now a past stage.
@@ -175,24 +178,29 @@
  * 	var killedEnemies = firstSoldier.发射子弹();
  * 
  * 
- * 	## Chaining invocations:
+ * ## 链式调用 (Chaining invocations)
  * 
  * Note that:
  * @example
  * 	firstSoldier === firstSoldier.第一步() // true
  * 	firstSoldier === firstSoldier.prepare() // true
  * 	firstSoldier === firstSoldier.getReady() // true
+ * 	.
+ * 	.
+ * 	.
  * 
  * because non-terminal stage methods return the decorared object itself.
  * 
  * So we can also do this:
- * @example:
+ * @example
  * 	var secondSoldier = new Soldier;
  * 
- * 	// If below were in English: var killedEnemiesBySecondSoldier = secondSoldier.getReady().fire();
  * 	var 被打死的敌人 = secondSoldier.预备().开火！();
+ * 	// If above were in English:
+ * 	// var killedEnemiesBySecondSoldier = secondSoldier.getReady().fire();
  * 
  * 
+ * ----- readme end -----
  * 
  * 
  * @param {!object} stagesOperator - The object to apply staged-methods pattern to.

@@ -48,8 +48,9 @@
 
 另，倘若将整条执行链称为“执行路线”，我认为，对于任何“受体”，
 完全可以为其构建多条执行路线，而不仅限于一条。
-由于执行线路不可中断，否则无从返回结果，
-多条执行线路不会互相干涉，即便它们共用某些方法。
+由于执行线路不可中断，否则无从返回结果；
+何况每当从新的“路线”之首个阶段开始执行时，执行“现状”会被重新配置，没有干扰。
+因此，多条执行线路不会互相干涉，即便它们共用某些方法函数。
 
 
 
@@ -116,8 +117,7 @@ So multiple routes will not disturb each other at all, even if they might share 
 
 
 
-
-# 较完整的范例（Examples）
+# 较完整的范例 (Examples)
 
 ## 基本用法 (Basics)
 
@@ -175,7 +175,7 @@ If below were in English: var killedEnemies = firstSoldier.shoot();
 
 ## 链式调用 (Chaining invocations)
 
-Note that: 
+Note that:
 
 	firstSoldier === firstSoldier.第一步() // true
 	firstSoldier === firstSoldier.prepare() // true
@@ -190,6 +190,9 @@ So we can also do this:
 
 	var secondSoldier = new Soldier;
 
-	// If below were in English:
-	// var killedEnemiesBySecondSoldier = secondSoldier.getReady().fire();
 	var 被打死的敌人 = secondSoldier.预备().开火！();
+	// If above were in English:
+	// var killedEnemiesBySecondSoldier = secondSoldier.getReady().fire();
+
+
+ 

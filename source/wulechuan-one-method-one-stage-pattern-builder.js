@@ -1,12 +1,13 @@
 /**
  * @author 吴乐川 <wulechuan@live.com>
  * 
- * ## 中文介绍
+ * -----
+ * 
+ * # 中文介绍
  * 
  * 凡由本辅助类构建的实例对象，可用于将本人设计的一种程序设计模式应用至另一“受体”对象。
  * “受体”因而被改造，其各个所涉及之方法函数均被依次对应于各自的所谓“执行阶段”，亦可称“步骤”，
- * 每个方法函数对应一个步骤。
- * 自此时起，仅第一个步骤所对应的方法函数被公开（或称“曝露”），
+ * 每个方法函数对应一个步骤。自此时起，仅第一个步骤所对应的方法函数被公开（或称“曝露”），
  * 其余后续步骤之方法函数均被隐藏，直至各自前导执行阶段完成，这些方法函数才会陆续公开。
  * 
  * 任何“步骤，凡非最终者，其对应之方法函数均返回“受体”对象本身，以实现对其各个方法函数的链式调用；
@@ -21,7 +22,8 @@
  * 	设有“步骤丙”、“步骤丁”及“步骤戊”三者，其中丁为“可省略”步骤，其余两者为“必经”步骤。
  * 	则，当丙结束时，非但代表丁的方法函数会被曝露，戊之对应方法函数亦会一同被曝露。
  * 
- * 一言以蔽之，大体上，不执行完早期方法函数，则后续方法函数是隐藏的，无从执行。据此，各个方法之调用次序无从违背。
+ * 一言以蔽之，大体上，不执行完早期方法函数，则后续方法函数是隐藏的，无从执行。
+ * 据此，各个方法之调用次序无从违背。
  * 
  * 此番改造之根本目的在于，将传统的形如：“
  * @example
@@ -44,12 +46,20 @@
  * 那么，该原始方法函数之返回值回被传递并最终返回至“外界”；
  * 而其余各阶段则之原始函数的返回值均会被忽略于调用链内部。
  * 
- * 通常，我建议奖该程序设计模式应用于“类”之定义内（针对JavaScript，亦即应用于另一个函数内部），
- * 以此方式自动改造每一个由该类构造的实例对象。见例。
+ * 该模式可应用于所谓“普通对象”，诸如“明文对象（一译‘字面量对象’）”、JSON等。
+ * 而将该程序设计模式应用于“类”之定义内（针对JavaScript，亦即应用于另一个函数内部），
+ * 作用于“this”对象，似乎是更为常见、实用之用法。亦即，每一个有此“类”构建之实例对象
+ * 均会被视为“受体”。见例。
+ * 
+ * 另，倘若将整条执行链称为“执行路线”，我认为，对于任何“受体”，
+ * 完全可以为其构建多条执行路线，而不仅限于一条。
+ * 由于执行线路不可中断，否则无从返回结果；
+ * 何况每当从新的“路线”之首个阶段开始执行时，执行“现状”会被重新配置，没有干扰。
+ * 因此，多条执行线路不会互相干涉，即便它们共用某些方法。
  * 
  * 
  * 
- * ## Introduction
+ * # Introduction
  * 
  * Instances of this helper class is to apply a programming pattern design by me
  * to a given object.
@@ -98,8 +108,21 @@
  * While those returning values of any other methods are simply ignored
  * inside of the invokaction chain scopes.
  * 
- * Usually you want to use an instance of this helper class inside another class,
- * to decorate each and every instance of the later class.
+ * This pattern can be applied to any object, such as an object literal, a JSON, etc.
+ * While using it inside the definition of a class(a function), applying it to the "this"
+ * object might be a more useful use case, I guess.
+ * Since that way, each and every instance of the class is automatically decorated.
+ * 
+ * If we call the execution chain a "route", we can expect that multiple routes being
+ * applied to a single object at the same time is allowed and safe.
+ * Because the execution should not exit in the half way, otherwise nothing is able to return.
+ * Plus each time we start a route, the situation we are in is initialized to be clean.
+ * So multiple routes will not disturb each other at all, even if they might share same methods.
+ * 
+ * 
+ * 
+ * 
+ * # 范例 (Examples)
  * 
  * @example
  * 	function Soldier() {
@@ -134,33 +157,43 @@
  * 
  * 	var firstSoldier = new Soldier;
  * 	
- * 	// Now the "firstSoldier" object has only those methods
- * 	// which are mapped onto the "methodAsStage1" function,
- * 	// in all three Chinese aliases, of course,
- * 	// since the usingLanguage has been set to 'zh-CN'.
- * 	// Those which are mapped onto the "shoot" function
- * 	// is *NOT* available at this time.
- * 
+ * Now the "firstSoldier" object has only those methods
+ * which are mapped onto the "methodAsStage1" function,
+ * in all three Chinese aliases, of course,
+ * since the usingLanguage has been set to 'zh-CN'.
+ * Those which are mapped onto the "shoot" function
+ * is *NOT* available at this time.
+ * @example
  * 	firstSoldier.第一步(); // In English, this should have been firstSoldier.prepare();
  * 
- * 	// From now on, the three aliases for the "methodAsStage1"
- * 	// are hidden (removed from the instance), since the stage1 is now a past stage.
- * 	// while the three aliases for the "shoot" function are available now.
+ * From now on, the three aliases for the "methodAsStage1"
+ * are hidden (removed from the instance), since the stage1 is now a past stage.
+ * while the three aliases for the "shoot" function are available now.
  * 
- * 	// If below were in English: var killedEnemies = firstSoldier.shoot();
+ * If below were in English: var killedEnemies = firstSoldier.shoot();
+ * @example
  * 	var killedEnemies = firstSoldier.发射子弹();
  * 
  * 
  * 	## Chaining invocations:
  * 
- * 	// Note that: firstSoldier === firstSoldier.第一步(),
- * 	// because non-terminal stage methods return the decorared object itself.
+ * Note that:
+ * @example
+ * 	firstSoldier === firstSoldier.第一步() // true
+ * 	firstSoldier === firstSoldier.prepare() // true
+ * 	firstSoldier === firstSoldier.getReady() // true
  * 
+ * because non-terminal stage methods return the decorared object itself.
+ * 
+ * So we can also do this:
  * @example:
  * 	var secondSoldier = new Soldier;
  * 
  * 	// If below were in English: var killedEnemiesBySecondSoldier = secondSoldier.getReady().fire();
  * 	var 被打死的敌人 = secondSoldier.预备().开火！();
+ * 
+ * 
+ * 
  * 
  * @param {!object} stagesOperator - The object to apply staged-methods pattern to.
  */

@@ -41,8 +41,15 @@
 那么，该原始方法函数之返回值回被传递并最终返回至“外界”；
 而其余各阶段则之原始函数的返回值均会被忽略于调用链内部。
 
-通常，我建议奖该程序设计模式应用于“类”之定义内（针对JavaScript，亦即应用于另一个函数内部），
-以此方式自动改造每一个由该类构造的实例对象。见例。
+该模式可应用于所谓“普通对象”，诸如“明文对象（一译‘字面量对象’）”、JSON等。
+而将该程序设计模式应用于“类”之定义内（针对JavaScript，亦即应用于另一个函数内部），
+作用于“this”对象，似乎是更为常见、实用之用法。亦即，每一个有此“类”构建之实例对象
+均会被视为“受体”。见例。
+
+另，倘若将整条执行链称为“执行路线”，我认为，对于任何“受体”，
+完全可以为其构建多条执行路线，而不仅限于一条。
+由于执行线路不可中断，否则无从返回结果，
+多条执行线路不会互相干涉，即便它们共用某些方法。
 
 
 
@@ -95,8 +102,20 @@ will be transferred to the "outside world", which is the custom program mentione
 While those returning values of any other methods are simply ignored
 inside of the invokaction chain scopes.
 
-Usually you want to use an instance of this helper class inside another class,
-to decorate each and every instance of the later class.
+This pattern can be applied to any object, such as an object literal, a JSON, etc.
+While using it inside the definition of a class(a function), applying it to the "this"
+object might be a more useful use case, I guess.
+Since that way, each and every instance of the class is automatically decorated.
+
+If we call the execution chain a "route", we can expect that multiple routes being
+applied to a single object at the same time is allowed and safe.
+Because the execution should not exit in the half way, otherwise nothing is able to return.
+Plus each time we start a route, the situation we are in is initialized to be clean.
+So multiple routes will not disturb each other at all, even if they might share same methods.
+
+
+
+
 
 # 较完整的范例（Examples）
 

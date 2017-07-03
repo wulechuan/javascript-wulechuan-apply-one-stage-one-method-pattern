@@ -20,19 +20,19 @@ Define a stage for a provided function. When the time(stage) is correct, the fun
 
 #### Arguments
 
-- stageAction
+- **stageAction**
 
   Must be a **function**.
 
   A function that will be added to the operator as its method at correct stage.
 
-- thisStageCanBeSkipped
+- **thisStageCanBeSkipped**
 
   Must be a **boolean**.
 
   A value of **true** means the stage being added is an optional stage, so that the method after this optional stage should also be exposed at the previous stage of this optional stage.
 
-- thisStageCanBeSkipped
+- **thisStageCanBeSkipped**
 
   Must be an **object**.
 
@@ -51,7 +51,7 @@ Set the preferred language to use.
 
 #### Arguments
 
-- languageCode
+- **languageCode**
 
   Must be a non-empty **string**.
 

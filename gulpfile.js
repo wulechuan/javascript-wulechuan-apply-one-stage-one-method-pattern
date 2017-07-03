@@ -73,6 +73,9 @@ const pump = require('pump');
 				;
 
 			readMeContentSnippetInThisFile += [
+				'',
+				'',
+				'',
 				'# API',
 				'',
 				'See: [API](API.md).'

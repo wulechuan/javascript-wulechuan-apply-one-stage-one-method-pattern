@@ -205,21 +205,26 @@
  * 
  * @param {!object} stagesOperator - The object to apply staged-methods pattern to.
  */
-function WulechuanApplyOneStageOneMethodProgrammingPatternTo(stagesOperator) {
+// eslint-disable-next-line
+function WulechuanApplyOneStageOneMethodProgrammingPatternTo(stageMethodsOwner) {
 	var methodName_addStage = 'addStage';
 	var methodName_setPreferredNaturalLanguageTo = 'setPreferredNaturalLanguageTo';
 	var methodName_startFromFirstStage = 'startFromFirstStage';
+	var methodName_stop = 'stop';
 
 	var thisManagerOfStages = this;
 
 	var allStages = [];
 	var currentStageIndex = NaN;
+	var theExecutionIsStopped; // Maybe it's some errors occurred.
+
 	var knownLanguagesSoFar = [];
 	var knownLanguagesIndicesSoFar = {}; // Simply for easy avoiding duplications
 	var usingLanguage;
 
 	thisManagerOfStages[methodName_addStage] = addFirstStage;
 	thisManagerOfStages[methodName_setPreferredNaturalLanguageTo] = setPreferredNaturalLanguageTo;
+	thisManagerOfStages[methodName_stop] = stop;
 
 
 
@@ -274,10 +279,18 @@ function WulechuanApplyOneStageOneMethodProgrammingPatternTo(stagesOperator) {
 			actionAliases: actionAliasesInAllLanguages,
 			allowsToSkip: thisStageCanBeSkipped,
 			action: function () {
-				currentStageIndex = indexOfThisStage;
-				var resultOfTheStageAction = stageAction.apply(stagesOperator, arguments);
+				if (theExecutionIsStopped) {
+					if (indexOfThisStage === allStages.length-1) {
+						return; // Return undefined if errors occured. Need more think.
+					} else {
+						return stageMethodsOwner;
+					}
+				}
 
-				_modifyThisOperatorByExposingOrHidingSomeMethods();
+				currentStageIndex = indexOfThisStage;
+				var resultOfTheStageAction = stageAction.apply(stageMethodsOwner, arguments);
+
+				_modifyMethodsOwnerByExposingOrHidingSomeMethods();
 
 				if (indexOfThisStage === allStages.length-1) {
 					// The final result of the actions chain is really what we want.
@@ -285,7 +298,7 @@ function WulechuanApplyOneStageOneMethodProgrammingPatternTo(stagesOperator) {
 				} else {
 					// Must return the {stagesOperator} for chaining steps,
 					// even if errors occur inside the action, as long as nothing get thrown.
-					return stagesOperator;
+					return stageMethodsOwner;
 				}
 			}
 		};
@@ -296,6 +309,7 @@ function WulechuanApplyOneStageOneMethodProgrammingPatternTo(stagesOperator) {
 	}
 
 	function addFirstStage(stageAction, thisStageCanBeSkipped, actionAliasesInAllLanguages) {
+		theExecutionIsStopped = false;
 		addStage(stageAction, thisStageCanBeSkipped, actionAliasesInAllLanguages);
 		thisManagerOfStages[methodName_addStage] = addStage;
 		thisManagerOfStages[methodName_setPreferredNaturalLanguageTo] = setPreferredNaturalLanguageTo;
@@ -380,15 +394,20 @@ function WulechuanApplyOneStageOneMethodProgrammingPatternTo(stagesOperator) {
 	}
 
 	function startFromFirstStage() {
-		allStages[0].action.apply(stagesOperator, arguments);
+		allStages[0].action.apply(stageMethodsOwner, arguments);
 	}
 
-	function _modifyThisOperatorByExposingOrHidingSomeMethods() {
+	function stop() {
+		theExecutionIsStopped = true;
+		console.error('The process is stopped at stage', currentStageIndex);
+	}
+
+	function _modifyMethodsOwnerByExposingOrHidingSomeMethods() {
 		_hideMethodsOfAllPastOrSkippedStages();
 
 		var currentStage = allStages[currentStageIndex];
 
-		currentStage.action.apply(stagesOperator, arguments);
+		currentStage.action.apply(stageMethodsOwner, arguments);
 
 		if (currentStageIndex === 0) {
 			_exposeMethodsOfAllStagesStartingWithIndexTillFirstRequiredStage(1);
@@ -404,7 +423,7 @@ function WulechuanApplyOneStageOneMethodProgrammingPatternTo(stagesOperator) {
 
 			for (var ai = 0; ai < actionAliasesInActuallyUsingLanuage.length; ai++) {
 				var alias = actionAliasesInActuallyUsingLanuage[ai];
-				delete stagesOperator[alias];
+				delete stageMethodsOwner[alias];
 			}
 		}
 	}
@@ -447,7 +466,7 @@ function WulechuanApplyOneStageOneMethodProgrammingPatternTo(stagesOperator) {
 
 			for (var ai = 0; ai < actionAliasesInActuallyUsingLanuage.length; ai++) {
 				var alias = actionAliasesInActuallyUsingLanuage[ai];
-				stagesOperator[alias] = actionToExpose;
+				stageMethodsOwner[alias] = actionToExpose;
 			}
 		}
 	}

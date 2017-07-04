@@ -71,3 +71,21 @@ Start the execution chain on the methods owner.
 None.
 
 
+
+
+### stop
+
+Stop the execution chain on the methods owner.
+If invoked withing a given stage, all methods for all subsequence stages
+will be skipped. And the finally returned value of the last stage is
+**always** undefined.
+
+#### Signature
+
+	function stop();
+
+#### Arguments
+
+None.
+
+

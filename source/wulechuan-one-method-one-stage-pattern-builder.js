@@ -208,7 +208,7 @@ module.exports = WulechuanApplyOneStageOneMethodProgrammingPatternTo;
  * @param {!object} stagesOperator - The object to apply staged-methods pattern to.
  */
 // eslint-disable-next-line
-function WulechuanApplyOneStageOneMethodProgrammingPatternTo(stageMethodsOwner) {
+function WulechuanApplyOneStageOneMethodProgrammingPatternTo(stageMethodsOwner, initialPreferredLanguage) {
 	var methodName_addStage = 'addStage';
 	var methodName_setPreferredNaturalLanguageTo = 'setPreferredNaturalLanguageTo';
 	var methodName_startFromFirstStage = 'startFromFirstStage';
@@ -222,7 +222,12 @@ function WulechuanApplyOneStageOneMethodProgrammingPatternTo(stageMethodsOwner) 
 
 	var knownLanguagesSoFar = [];
 	var knownLanguagesIndicesSoFar = {}; // Simply for easy avoiding duplications
-	var usingLanguage;
+	var preferredLanguage;
+
+
+	if (initialPreferredLanguage && typeof initialPreferredLanguage === 'string') {
+		preferredLanguage = initialPreferredLanguage;
+	} 
 
 	thisManagerOfStages[methodName_addStage] = addFirstStage;
 	thisManagerOfStages[methodName_setPreferredNaturalLanguageTo] = setPreferredNaturalLanguageTo;
@@ -353,10 +358,10 @@ function WulechuanApplyOneStageOneMethodProgrammingPatternTo(stageMethodsOwner) 
 		}
 	}
 
-	function _getActionAliasesBetterInThisLanguage(actionAliasesInAllLanguages, preferredLanguage) {
-		var foundActionAliases = actionAliasesInAllLanguages[preferredLanguage];
+	function _getActionAliasesBetterInThisLanguage(actionAliasesInAllLanguages, _preferredLanguage) {
+		var foundActionAliases = actionAliasesInAllLanguages[_preferredLanguage];
 		if (_isAUsableArray(foundActionAliases)) {
-			actionAliasesInAllLanguages.usingLanguage = preferredLanguage;
+			actionAliasesInAllLanguages.usingLanguage = _preferredLanguage;
 			return foundActionAliases;
 		}
 
@@ -380,7 +385,7 @@ function WulechuanApplyOneStageOneMethodProgrammingPatternTo(stageMethodsOwner) 
 		}
 
 		console.warn('For stage', actionAliasesInAllLanguages.stageIndex,
-			', none of the aliases is in the preferred language ("'+preferredLanguage+'").',
+			', none of the aliases is in the preferred language ("'+_preferredLanguage+'").',
 			'\nInstead, aliases in "'+language+'" are exposed as methods.'
 		);
 
@@ -391,7 +396,7 @@ function WulechuanApplyOneStageOneMethodProgrammingPatternTo(stageMethodsOwner) 
 		if (!language) {
 			throw TypeError('Must specify the natural language to use.');
 		}
-		usingLanguage = language;
+		preferredLanguage = language;
 		_tryToExposeFirstStageSoThatTheOperatorIsUsable();
 	}
 
@@ -405,18 +410,11 @@ function WulechuanApplyOneStageOneMethodProgrammingPatternTo(stageMethodsOwner) 
 	}
 
 	function _modifyMethodsOwnerByExposingOrHidingSomeMethods() {
-		_hideMethodsOfAllPastOrSkippedStages();
-
-		var currentStage = allStages[currentStageIndex];
-
-		currentStage.action.apply(stageMethodsOwner, arguments);
-
-		if (currentStageIndex === 0) {
-			_exposeMethodsOfAllStagesStartingWithIndexTillFirstRequiredStage(1);
-		}
+		_hideMethodsOfAllPastOrSkippedStagesIncludingCurrentStage();
+		_exposeMethodsOfAllStagesTillFirstRequiredStageStartingWithIndex(currentStageIndex+1);
 	}
 
-	function _hideMethodsOfAllPastOrSkippedStages() {
+	function _hideMethodsOfAllPastOrSkippedStagesIncludingCurrentStage() {
 		for (var si = 0; si <= currentStageIndex; si++) {
 			var stage = allStages[si];
 			var actionAliasesInAllLanguages = stage.actionAliases;
@@ -432,7 +430,7 @@ function WulechuanApplyOneStageOneMethodProgrammingPatternTo(stageMethodsOwner) 
 
 	function _tryToExposeFirstStageSoThatTheOperatorIsUsable() {
 		if (allStages.length < 1) return;
-		if (!usingLanguage) return;
+		if ( ! preferredLanguage) return;
 
 		// Expose the method of the first stage with the common name,
 		// a.k.a. the "startFromFirstStage" according to the default configuration.
@@ -442,7 +440,7 @@ function WulechuanApplyOneStageOneMethodProgrammingPatternTo(stageMethodsOwner) 
 		_exposeMethodsOfStagesWithIndexBetween(0, 1);
 	}
 
-	function _exposeMethodsOfAllStagesStartingWithIndexTillFirstRequiredStage(startingStageIndex) {
+	function _exposeMethodsOfAllStagesTillFirstRequiredStageStartingWithIndex(startingStageIndex) {
 		var endingExclusiveStageIndex = allStages.length;
 
 		var si, stage;
@@ -464,7 +462,7 @@ function WulechuanApplyOneStageOneMethodProgrammingPatternTo(stageMethodsOwner) 
 			var actionToExpose = stage.action;
 
 			var actionAliasesInActuallyUsingLanuage =
-				_getActionAliasesBetterInThisLanguage(stage.actionAliases, usingLanguage);
+				_getActionAliasesBetterInThisLanguage(stage.actionAliases, preferredLanguage);
 
 			for (var ai = 0; ai < actionAliasesInActuallyUsingLanuage.length; ai++) {
 				var alias = actionAliasesInActuallyUsingLanuage[ai];

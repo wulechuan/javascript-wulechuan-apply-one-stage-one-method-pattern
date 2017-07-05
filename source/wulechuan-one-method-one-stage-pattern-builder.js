@@ -1,3 +1,5 @@
+module.exports = WulechuanApplyOneStageOneMethodProgrammingPatternTo;
+
 /**
  * @author 吴乐川 <wulechuan@live.com>
  * 

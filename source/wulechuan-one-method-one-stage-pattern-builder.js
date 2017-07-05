@@ -233,7 +233,7 @@ function WulechuanApplyOneStageOneMethodProgrammingPatternTo(stageMethodsOwner) 
 
 
 	function _isAUsableArray(subject) {
-		return Array.isArray(subject) && subject.length > 1;
+		return Array.isArray(subject) && subject.length > 0;
 	}
 
 
@@ -310,9 +310,9 @@ function WulechuanApplyOneStageOneMethodProgrammingPatternTo(stageMethodsOwner) 
 		return newStage;
 	}
 
-	function addFirstStage(stageAction, thisStageCanBeSkipped, actionAliasesInAllLanguages) {
+	function addFirstStage(/* stageAction, thisStageCanBeSkipped, actionAliasesInAllLanguages */) {
 		theExecutionIsStopped = false;
-		addStage(stageAction, thisStageCanBeSkipped, actionAliasesInAllLanguages);
+		addStage.apply(thisManagerOfStages, arguments);
 		thisManagerOfStages[methodName_addStage] = addStage;
 		thisManagerOfStages[methodName_setPreferredNaturalLanguageTo] = setPreferredNaturalLanguageTo;
 		_tryToExposeFirstStageSoThatTheOperatorIsUsable();
@@ -333,8 +333,8 @@ function WulechuanApplyOneStageOneMethodProgrammingPatternTo(stageMethodsOwner) 
 			var actionAliasesInASpecificLanguage = actionAliasesInAllLanguages[language];
 
 			if (actionAliasesInASpecificLanguage && typeof actionAliasesInASpecificLanguage === 'string') {
-				actionAliasesInAllLanguages[language] = [actionAliasesInASpecificLanguage];
-				actionAliasesInASpecificLanguage = actionAliasesInAllLanguages[language];
+				actionAliasesInASpecificLanguage = [actionAliasesInASpecificLanguage];
+				actionAliasesInAllLanguages[language] = actionAliasesInASpecificLanguage;
 			}
 
 			if (!_isAUsableArray(actionAliasesInASpecificLanguage)) continue;

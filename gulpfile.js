@@ -12,14 +12,44 @@ const globsToClearBeforeRebuilding = [
 
 
 
+const processArguments = require('minimist')(process.argv.slice(2));
 
-const gulp = require('gulp');
-const runTasksInSequence = require('gulp-sequence');
-const replaceFileContent = require('gulp-change');
 const deleteFiles = require('del');
+const gulp = require('gulp');
+const replaceFileContent = require('gulp-change');
 const renameFiles = require('gulp-rename');
+const runTasksInSequence = require('gulp-sequence');
 const minifyJs = require('gulp-uglify');
 const pump = require('pump');
+
+
+const isToBuildForRelease = isRunningInReleasingMode(processArguments);
+const isToDevelopWithWatching = !isToBuildForRelease;
+
+
+function isRunningInReleasingMode(processArguments) {
+	const thoseArgumentsStandForRelease = [
+		'release',
+		'production',
+		'ship',
+		'final',
+		'publish'
+	];
+
+	for (let i = 0; i < thoseArgumentsStandForRelease.length; i++) {
+		let allowedInput = thoseArgumentsStandForRelease[i];
+		if (typeof allowedInput !== 'string' || !allowedInput) {
+			continue;
+		}
+
+		allowedInput = allowedInput.trim();
+
+		if (processArguments[allowedInput]) return true;
+	}
+
+	return false;
+}
+
 
 
 
@@ -134,7 +164,15 @@ const pump = require('pump');
 
 
 (function 定义所谓顶级任务() {
+	var tasksToRun = [
+		'build: all'
+	];
+
+	if (isToDevelopWithWatching) {
+		tasksToRun.push('watch');
+	}
+
 	gulp.task('default', (thisTaskIsDone) => {
-		runTasksInSequence('build: all', 'watch')(thisTaskIsDone);
+		runTasksInSequence.apply(this, tasksToRun)(thisTaskIsDone);
 	});
 })();

@@ -1,4 +1,10 @@
-# 中文介绍
+# npm
+
+[@wulechuan/apply-one-stage-one-method-pattern](https://www.npmjs.com/package/@wulechuan/apply-one-stage-one-method-pattern)
+
+
+
+# 介绍
 
 凡由本类构建的实例对象，可用于将本人设计的一种程序设计模式应用至另一“受体”对象。
 “受体”因而被改造，其各个所涉及之方法函数均被依次对应于各自的所谓“执行阶段”，亦可称“步骤”，

@@ -24,7 +24,6 @@ const replaceFileContent = require('gulp-change');
 const renameFiles = require('gulp-rename');
 const runTasksInSequence = require('gulp-sequence');
 const minifyJs = require('gulp-uglify');
-const pathTool = require('path');
 const pump = require('pump');
 const webpack = require('webpack-stream');
 
@@ -150,9 +149,7 @@ function isRunningInReleasingMode(processArguments) {
 	gulp.task('webpack: examples', () => {
 		return gulp.src(examplesGlobs)
 			.pipe(webpack(require('./webpack.config.js')))
-			.pipe(gulp.dest(pathTool.join(
-				examplesFolder
-			)))
+			.pipe(gulp.dest('.'))
 			;
 	});
 

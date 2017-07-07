@@ -11,9 +11,12 @@ const allEntries = (function buildMultipleWebpackEntries(patternsArray) {
 	function processOnePattern(pattern) {
 		const matchedEntriesArray = glob.sync(pattern);
 		matchedEntriesArray.forEach(entry => {
-			const nearistFolderName = pathTool.dirname(entry).split(pathTool.sep).pop();
-			allEntriesInRelativePaths[nearistFolderName] = entry;
-			allEntries[nearistFolderName] = pathTool.resolve(__dirname, entry);
+			// const nearistFolderName = pathTool.dirname(entry).split(pathTool.sep).pop();
+			// const entryName = nearistFolderName;
+			const entryName = pathTool.dirname(entry);
+
+			allEntriesInRelativePaths[entryName] = entry;
+			allEntries[entryName] = pathTool.resolve(__dirname, entry);
 		});
 	}
 
@@ -36,7 +39,7 @@ const allEntries = (function buildMultipleWebpackEntries(patternsArray) {
 module.exports = {
 	entry: allEntries,
 	output: {
-		path: pathTool.resolve(__dirname, 'examples'),
+		path: pathTool.resolve(__dirname),
 		filename: '[name]/webpack-bundle.js'
 	},
 	rules: [

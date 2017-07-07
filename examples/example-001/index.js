@@ -55,11 +55,11 @@ function A(initName) {
 
 	function _getPrivateThing() {
 		privateThingAccessingCount++;
-		return '\n\t'+privateThing+' '+privateThingAccessingCount;
+		return '\n\t' + privateThing + ' ' + privateThingAccessingCount;
 	}
 
 	function _logInvocationOf(methodCaption) {
-		console.log('\n\nInvoking method: '+methodCaption+':', _getPrivateThing(), '\n\n');
+		console.log('\n\nInvoking method: ' + methodCaption + ':', _getPrivateThing(), '\n\n');
 	}
 }
 
@@ -69,7 +69,7 @@ function logMethodsOf(obj, caption) {
 	if (!caption || typeof caption !== 'string') {
 		caption = '';
 	} else {
-		caption = ' "'+caption.trim()+'"';
+		caption = ' "' + caption.trim() + '"';
 	}
 
 	var logStringSegments = [
@@ -83,7 +83,7 @@ function logMethodsOf(obj, caption) {
 		}
 	}
 
-	console.log('Object'+caption+' has these methods:', logStringSegments.join(prefixPerLine), '\n\n');
+	console.log('Object' + caption + ' has these methods:', logStringSegments.join(prefixPerLine), '\n\n');
 }
 
 
@@ -145,18 +145,31 @@ console.groupEnd();
 
 
 
-console.group(
+console.group('Finally');
+console.log(
 	'Finally let\'s try to invoke the shared method, **AGAIN**!',
-	'\nBecause we had thought that the version in the route 1 were preserved.',
-	'\nBut that\'s simply **NOT** the case. And an error will thrown.',
-	'\nBecause the same method name should always mean the exactly the same thing.',
+	'\nBecause we had thought that the version in the route 1 were preserved.'
+);
+console.warn('But that\'s simply **NOT** the case. And an error will throw.');
+console.info(
+	'Because the same method name should always mean the exactly the same thing.',
 	'\nSince the "method_shared" method has been invoked via the route 2,',
 	'\nIt is our responsibility to make sure that there are no route meaning chaos.',
-	'\nThe example above is simply **not right**.',
-	'\n\nBesides, generally, although we can design more than one routes for an object,',
-	'\nor even share the same function as the stepping method of each route,',
-	'\nwe shall not mixing up the execution of these routes,',
+	'\nThe example above is simply **not right**.'
+);
+
+console.info(
+	'\nBesides, generally, although we can design more than one routes for an object,',
+	'\nor even share the same function as the stepping method across routes,'
+);
+console.warn(
+	'we shall not mixing up the execution of these routes,',
 	'\nOtherwise, why routes?'
 );
+
+
+console.log('\n\nNow let\'s "welcome" our TypeError:');
 a['method_shared']();
-console.groupEnd();
+
+
+// console.groupEnd(); // won't reach here

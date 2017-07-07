@@ -27,7 +27,6 @@ const allEntries = (function buildMultipleWebpackEntries(patternsArray) {
 		processOnePattern(pattern);
 	});
 
-
 	console.log('All entries for webpack:');
 	console.log(JSON.stringify(allEntriesInRelativePaths, null, '\t'));
 

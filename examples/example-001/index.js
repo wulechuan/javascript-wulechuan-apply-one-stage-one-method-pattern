@@ -1,4 +1,4 @@
-var wulechuanApplyStagesPatternToMethodsOwner =
+var WulechuanApplyStagesPatternToMethodsOwner =
 	require('../../source/wulechuan-one-method-one-stage-pattern-builder');
 // console.log(wulechuanApplyStagesPatternToMethodsOwner);
 
@@ -15,8 +15,8 @@ function A(initName) {
 		console.log('You will never be able to use me, because the "aStagesRoute1" will overwrite me');
 	};
 
-	var aStagesRoute1 = new wulechuanApplyStagesPatternToMethodsOwner(this, 'en-US');
-	var aStagesRoute2 = new wulechuanApplyStagesPatternToMethodsOwner(this, 'en-US');
+	var aStagesRoute1 = new WulechuanApplyStagesPatternToMethodsOwner(this, 'en-US');
+	var aStagesRoute2 = new WulechuanApplyStagesPatternToMethodsOwner(this, 'en-US');
 
 
 
@@ -87,9 +87,20 @@ function logMethodsOf(obj, caption) {
 	console.log('Object'+caption+' has these methods:', logStringSegments.join(prefixPerLine), '\n\n');
 }
 
+
+
+
+
+
 var a = new A('wulechuan');
 
-window.a = a; // for we to tweak it more.
+// Expose these for we to tweak them more in the browser console.
+window.WulechuanApplyStagesPatternToMethodsOwner = WulechuanApplyStagesPatternToMethodsOwner;
+window.a = a;
+
+
+
+
 
 console.group('At beginning');
 logMethodsOf(a, 'a');
@@ -141,10 +152,12 @@ console.group(
 	'\nBut that\'s simply **NOT** the case. And an error will thrown.',
 	'\nBecause the same method name should always mean the exactly the same thing.',
 	'\nSince the "method_shared" method has been invoked via the route 2,',
-	'It is our responsibility to make sure that there are no route meaning chaos.',
-	'\nThe example above is simple not "right".',
-	'Besides, generally, although we can design more than one routes for an object',
-	'We shall not mixing up the execution of these routes. Otherwise, why routes?'
+	'\nIt is our responsibility to make sure that there are no route meaning chaos.',
+	'\nThe example above is simply **not right**.',
+	'\n\nBesides, generally, although we can design more than one routes for an object,',
+	'\nor even share the same function as the stepping method of each route,',
+	'\nwe shall not mixing up the execution of these routes,',
+	'\nOtherwise, why routes?'
 );
 a['method_shared']();
 console.groupEnd();

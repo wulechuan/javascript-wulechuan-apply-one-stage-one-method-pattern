@@ -123,7 +123,7 @@ So multiple routes will not disturb each other at all, even if they might share 
 
 	function Soldier() {
 
-		var stagesBuilder = new WulechuanApplyOneStageOneMethodProgrammingPatternFor(this);
+		var stagesBuilder = new WulechuanApplyOneStageOneMethodProgrammingPatternToMethodsOwner(this);
 
 		stagesBuilder.addStage(methodAsStage1, true, {
 			'zh-CN': [ '第一步', '预备', '准备' ],

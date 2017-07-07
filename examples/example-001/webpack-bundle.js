@@ -44,7 +44,7 @@
 /* 0 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var wulechuanApplyStagesPatternToMethodsOwner =
+	var WulechuanApplyStagesPatternToMethodsOwner =
 		__webpack_require__(1);
 	// console.log(wulechuanApplyStagesPatternToMethodsOwner);
 
@@ -61,8 +61,8 @@
 			console.log('You will never be able to use me, because the "aStagesRoute1" will overwrite me');
 		};
 
-		var aStagesRoute1 = new wulechuanApplyStagesPatternToMethodsOwner(this, 'en-US');
-		var aStagesRoute2 = new wulechuanApplyStagesPatternToMethodsOwner(this, 'en-US');
+		var aStagesRoute1 = new WulechuanApplyStagesPatternToMethodsOwner(this, 'en-US');
+		var aStagesRoute2 = new WulechuanApplyStagesPatternToMethodsOwner(this, 'en-US');
 
 
 
@@ -133,9 +133,20 @@
 		console.log('Object'+caption+' has these methods:', logStringSegments.join(prefixPerLine), '\n\n');
 	}
 
+
+
+
+
+
 	var a = new A('wulechuan');
 
-	window.a = a; // for we to tweak it more.
+	// Expose these for we to tweak them more in the browser console.
+	window.WulechuanApplyStagesPatternToMethodsOwner = WulechuanApplyStagesPatternToMethodsOwner;
+	window.a = a;
+
+
+
+
 
 	console.group('At beginning');
 	logMethodsOf(a, 'a');
@@ -187,10 +198,12 @@
 		'\nBut that\'s simply **NOT** the case. And an error will thrown.',
 		'\nBecause the same method name should always mean the exactly the same thing.',
 		'\nSince the "method_shared" method has been invoked via the route 2,',
-		'It is our responsibility to make sure that there are no route meaning chaos.',
-		'\nThe example above is simple not "right".',
-		'Besides, generally, although we can design more than one routes for an object',
-		'We shall not mixing up the execution of these routes. Otherwise, why routes?'
+		'\nIt is our responsibility to make sure that there are no route meaning chaos.',
+		'\nThe example above is simply **not right**.',
+		'\n\nBesides, generally, although we can design more than one routes for an object,',
+		'\nor even share the same function as the stepping method of each route,',
+		'\nwe shall not mixing up the execution of these routes,',
+		'\nOtherwise, why routes?'
 	);
 	a['method_shared']();
 	console.groupEnd();
@@ -331,7 +344,7 @@
 	 * @example
 	 * 	function Soldier() {
 	 * 
-	 * 		var stagesBuilder = new WulechuanApplyOneStageOneMethodProgrammingPatternFor(this);
+	 * 		var stagesBuilder = new WulechuanApplyOneStageOneMethodProgrammingPatternToMethodsOwner(this);
 	 * 
 	 * 		stagesBuilder.addStage(methodAsStage1, true, {
 	 * 			'zh-CN': [ '第一步', '预备', '准备' ],
@@ -413,7 +426,7 @@
 		var methodName_addStage = 'addStage';
 		var methodName_setPreferredNaturalLanguageTo = 'setPreferredNaturalLanguageTo';
 		var methodName_startFromFirstStage = 'startFromFirstStage';
-		var methodName_stop = 'stop';
+		var methodName_abort = 'abort';
 
 		var thisManagerOfStages = this;
 
@@ -432,7 +445,7 @@
 
 		thisManagerOfStages[methodName_addStage] = addFirstStage;
 		thisManagerOfStages[methodName_setPreferredNaturalLanguageTo] = setPreferredNaturalLanguageTo;
-		thisManagerOfStages[methodName_stop] = stop;
+		thisManagerOfStages[methodName_abort] = abort;
 
 
 
@@ -474,33 +487,34 @@
 			}
 
 
-			// This line below might throw an error if the provided actionAliases is not valid.
-			_examineProvidedActionAliases(actionAliasesInAllLanguages);
+			var examinedAliasesInAllLanguages =
+				// This line below might throw an error if the provided actionAliases is not valid.
+				_examineProvidedActionAliases(actionAliasesInAllLanguages);
 
 
-			var indexOfThisStage = allStages.length;
+			var indexOfThisNewStage = allStages.length;
 
-			actionAliasesInAllLanguages.stageIndex = indexOfThisStage;
-			actionAliasesInAllLanguages.usingLanguage = '';
+			examinedAliasesInAllLanguages.stageIndex = indexOfThisNewStage;
+			examinedAliasesInAllLanguages.usingLanguage = '';
 
 			var newStage = {
-				actionAliases: actionAliasesInAllLanguages,
+				actionAliases: examinedAliasesInAllLanguages,
 				allowsToSkip: thisStageCanBeSkipped,
 				action: function () {
 					if (theExecutionIsStopped) {
-						if (indexOfThisStage === allStages.length-1) {
+						if (indexOfThisNewStage === allStages.length-1) {
 							return; // Return undefined if errors occured. Need more think.
 						} else {
 							return stageMethodsOwner;
 						}
 					}
 
-					currentStageIndex = indexOfThisStage;
+					currentStageIndex = indexOfThisNewStage;
 					var resultOfTheStageAction = stageAction.apply(stageMethodsOwner, arguments);
 
 					_modifyMethodsOwnerByExposingOrHidingSomeMethods();
 
-					if (indexOfThisStage === allStages.length-1) {
+					if (indexOfThisNewStage === allStages.length-1) {
 						// The final result of the actions chain is really what we want.
 						return resultOfTheStageAction;
 					} else {
@@ -525,10 +539,27 @@
 		}
 
 		function _examineProvidedActionAliases(actionAliasesInAllLanguages) {
+			var examinedAliases = {};
+
 			var errorMessage1 = 'At least one alias is required for a stage action to publish as a method.';
 			var atLeastOneValidAliasIsProvided = false;
 
-			if (!actionAliasesInAllLanguages || typeof actionAliasesInAllLanguages !== 'object') {
+			if (typeof actionAliasesInAllLanguages === 'string') {
+				if ( ! actionAliasesInAllLanguages) {
+					throw RangeError('An alias for a method must not be an empty string');
+				}
+
+				if ( ! preferredLanguage) {
+					throw TypeError(
+						'Before the preferred language is set, '+
+						'the language an alias of a method is in must be specified explicitly.'
+					);
+				}
+
+				var _tempAliasesSettings = {};
+				_tempAliasesSettings[preferredLanguage] = [actionAliasesInAllLanguages];
+				actionAliasesInAllLanguages = _tempAliasesSettings;
+			} else if ( ! actionAliasesInAllLanguages || typeof actionAliasesInAllLanguages !== 'object') {
 				throw TypeError(
 					'The action aliases argument must be an object, '+
 					'containing at least one alias which is marked as in a specified language.'
@@ -543,20 +574,36 @@
 					actionAliasesInAllLanguages[language] = actionAliasesInASpecificLanguage;
 				}
 
-				if (!_isAUsableArray(actionAliasesInASpecificLanguage)) continue;
+				if ( ! _isAUsableArray(actionAliasesInASpecificLanguage)) continue;
+
+				var validEntries = [];
+				for (var _i=0; _i<actionAliasesInASpecificLanguage.length; _i++) {
+					var entry = actionAliasesInASpecificLanguage[_i];
+					if (entry && typeof entry === 'string') {
+						validEntries.push(entry);
+					}
+				}
+
+				if (validEntries.length < 1) {
+					console.warn('Non of the entries in language "'+language+'" are valid.');
+					continue;
+				}
 
 				atLeastOneValidAliasIsProvided = true;
+				examinedAliases[language] = validEntries;
 
-				var isAnUnknownLanguage = !knownLanguagesIndicesSoFar[language];
+				var isAnUnknownLanguage = ! knownLanguagesIndicesSoFar[language];
 				if (isAnUnknownLanguage) {
 					knownLanguagesSoFar.push(language);
 					knownLanguagesIndicesSoFar[language] = true;
 				}
 			}
 
-			if (!atLeastOneValidAliasIsProvided) {
+			if ( ! atLeastOneValidAliasIsProvided) {
 				throw TypeError(errorMessage1);
 			}
+
+			return examinedAliases;
 		}
 
 		function _getActionAliasesBetterInThisLanguage(actionAliasesInAllLanguages, _preferredLanguage) {
@@ -594,7 +641,7 @@
 		}
 
 		function setPreferredNaturalLanguageTo(language) {
-			if (!language) {
+			if ( ! language) {
 				throw TypeError('Must specify the natural language to use.');
 			}
 			preferredLanguage = language;
@@ -605,9 +652,13 @@
 			allStages[0].action.apply(stageMethodsOwner, arguments);
 		}
 
-		function stop() {
-			theExecutionIsStopped = true;
-			console.error('The process is stopped at stage', currentStageIndex);
+		function abort() {
+			if (currentStageIndex >= 0) {
+				theExecutionIsStopped = true;
+				console.error('The process is stopped at stage', currentStageIndex);
+			} else {
+				console.info('The execution process has not started yet.');
+			}
 		}
 
 		function _modifyMethodsOwnerByExposingOrHidingSomeMethods() {

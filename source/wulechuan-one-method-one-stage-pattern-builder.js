@@ -130,7 +130,7 @@ module.exports = WulechuanApplyOneStageOneMethodProgrammingPatternToMethodsOwner
  * @example
  * 	function Soldier() {
  * 
- * 		var stagesBuilder = new WulechuanApplyOneStageOneMethodProgrammingPatternFor(this);
+ * 		var stagesBuilder = new WulechuanApplyOneStageOneMethodProgrammingPatternToMethodsOwner(this);
  * 
  * 		stagesBuilder.addStage(methodAsStage1, true, {
  * 			'zh-CN': [ '第一步', '预备', '准备' ],
@@ -212,7 +212,7 @@ function WulechuanApplyOneStageOneMethodProgrammingPatternToMethodsOwner(stageMe
 	var methodName_addStage = 'addStage';
 	var methodName_setPreferredNaturalLanguageTo = 'setPreferredNaturalLanguageTo';
 	var methodName_startFromFirstStage = 'startFromFirstStage';
-	var methodName_stop = 'stop';
+	var methodName_abort = 'abort';
 
 	var thisManagerOfStages = this;
 
@@ -231,7 +231,7 @@ function WulechuanApplyOneStageOneMethodProgrammingPatternToMethodsOwner(stageMe
 
 	thisManagerOfStages[methodName_addStage] = addFirstStage;
 	thisManagerOfStages[methodName_setPreferredNaturalLanguageTo] = setPreferredNaturalLanguageTo;
-	thisManagerOfStages[methodName_stop] = stop;
+	thisManagerOfStages[methodName_abort] = abort;
 
 
 
@@ -273,33 +273,34 @@ function WulechuanApplyOneStageOneMethodProgrammingPatternToMethodsOwner(stageMe
 		}
 
 
-		// This line below might throw an error if the provided actionAliases is not valid.
-		_examineProvidedActionAliases(actionAliasesInAllLanguages);
+		var examinedAliasesInAllLanguages =
+			// This line below might throw an error if the provided actionAliases is not valid.
+			_examineProvidedActionAliases(actionAliasesInAllLanguages);
 
 
-		var indexOfThisStage = allStages.length;
+		var indexOfThisNewStage = allStages.length;
 
-		actionAliasesInAllLanguages.stageIndex = indexOfThisStage;
-		actionAliasesInAllLanguages.usingLanguage = '';
+		examinedAliasesInAllLanguages.stageIndex = indexOfThisNewStage;
+		examinedAliasesInAllLanguages.usingLanguage = '';
 
 		var newStage = {
-			actionAliases: actionAliasesInAllLanguages,
+			actionAliases: examinedAliasesInAllLanguages,
 			allowsToSkip: thisStageCanBeSkipped,
 			action: function () {
 				if (theExecutionIsStopped) {
-					if (indexOfThisStage === allStages.length-1) {
+					if (indexOfThisNewStage === allStages.length-1) {
 						return; // Return undefined if errors occured. Need more think.
 					} else {
 						return stageMethodsOwner;
 					}
 				}
 
-				currentStageIndex = indexOfThisStage;
+				currentStageIndex = indexOfThisNewStage;
 				var resultOfTheStageAction = stageAction.apply(stageMethodsOwner, arguments);
 
 				_modifyMethodsOwnerByExposingOrHidingSomeMethods();
 
-				if (indexOfThisStage === allStages.length-1) {
+				if (indexOfThisNewStage === allStages.length-1) {
 					// The final result of the actions chain is really what we want.
 					return resultOfTheStageAction;
 				} else {
@@ -324,10 +325,27 @@ function WulechuanApplyOneStageOneMethodProgrammingPatternToMethodsOwner(stageMe
 	}
 
 	function _examineProvidedActionAliases(actionAliasesInAllLanguages) {
+		var examinedAliases = {};
+
 		var errorMessage1 = 'At least one alias is required for a stage action to publish as a method.';
 		var atLeastOneValidAliasIsProvided = false;
 
-		if (!actionAliasesInAllLanguages || typeof actionAliasesInAllLanguages !== 'object') {
+		if (typeof actionAliasesInAllLanguages === 'string') {
+			if ( ! actionAliasesInAllLanguages) {
+				throw RangeError('An alias for a method must not be an empty string');
+			}
+
+			if ( ! preferredLanguage) {
+				throw TypeError(
+					'Before the preferred language is set, '+
+					'the language an alias of a method is in must be specified explicitly.'
+				);
+			}
+
+			var _tempAliasesSettings = {};
+			_tempAliasesSettings[preferredLanguage] = [actionAliasesInAllLanguages];
+			actionAliasesInAllLanguages = _tempAliasesSettings;
+		} else if ( ! actionAliasesInAllLanguages || typeof actionAliasesInAllLanguages !== 'object') {
 			throw TypeError(
 				'The action aliases argument must be an object, '+
 				'containing at least one alias which is marked as in a specified language.'
@@ -342,20 +360,36 @@ function WulechuanApplyOneStageOneMethodProgrammingPatternToMethodsOwner(stageMe
 				actionAliasesInAllLanguages[language] = actionAliasesInASpecificLanguage;
 			}
 
-			if (!_isAUsableArray(actionAliasesInASpecificLanguage)) continue;
+			if ( ! _isAUsableArray(actionAliasesInASpecificLanguage)) continue;
+
+			var validEntries = [];
+			for (var _i=0; _i<actionAliasesInASpecificLanguage.length; _i++) {
+				var entry = actionAliasesInASpecificLanguage[_i];
+				if (entry && typeof entry === 'string') {
+					validEntries.push(entry);
+				}
+			}
+
+			if (validEntries.length < 1) {
+				console.warn('Non of the entries in language "'+language+'" are valid.');
+				continue;
+			}
 
 			atLeastOneValidAliasIsProvided = true;
+			examinedAliases[language] = validEntries;
 
-			var isAnUnknownLanguage = !knownLanguagesIndicesSoFar[language];
+			var isAnUnknownLanguage = ! knownLanguagesIndicesSoFar[language];
 			if (isAnUnknownLanguage) {
 				knownLanguagesSoFar.push(language);
 				knownLanguagesIndicesSoFar[language] = true;
 			}
 		}
 
-		if (!atLeastOneValidAliasIsProvided) {
+		if ( ! atLeastOneValidAliasIsProvided) {
 			throw TypeError(errorMessage1);
 		}
+
+		return examinedAliases;
 	}
 
 	function _getActionAliasesBetterInThisLanguage(actionAliasesInAllLanguages, _preferredLanguage) {
@@ -393,7 +427,7 @@ function WulechuanApplyOneStageOneMethodProgrammingPatternToMethodsOwner(stageMe
 	}
 
 	function setPreferredNaturalLanguageTo(language) {
-		if (!language) {
+		if ( ! language) {
 			throw TypeError('Must specify the natural language to use.');
 		}
 		preferredLanguage = language;
@@ -404,9 +438,13 @@ function WulechuanApplyOneStageOneMethodProgrammingPatternToMethodsOwner(stageMe
 		allStages[0].action.apply(stageMethodsOwner, arguments);
 	}
 
-	function stop() {
-		theExecutionIsStopped = true;
-		console.error('The process is stopped at stage', currentStageIndex);
+	function abort() {
+		if (currentStageIndex >= 0) {
+			theExecutionIsStopped = true;
+			console.error('The process is stopped at stage', currentStageIndex);
+		} else {
+			console.info('The execution process has not started yet.');
+		}
 	}
 
 	function _modifyMethodsOwnerByExposingOrHidingSomeMethods() {

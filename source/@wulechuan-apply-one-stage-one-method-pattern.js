@@ -223,7 +223,7 @@ function WulechuanApplyOneStageOneMethodProgrammingPatternToMethodsOwner(stageMe
 	var thisManagerOfStages = this;
 
 	var allStages = [];
-	var currentStageIndex = NaN;
+	var indexOfCurrentStage = NaN;
 	var theExecutionIsStopped; // Maybe it's some errors occurred.
 
 	var knownLanguagesSoFar = [];
@@ -301,7 +301,7 @@ function WulechuanApplyOneStageOneMethodProgrammingPatternToMethodsOwner(stageMe
 					}
 				}
 
-				currentStageIndex = indexOfThisNewStage;
+				indexOfCurrentStage = indexOfThisNewStage;
 				var resultOfTheStageAction = stageAction.apply(stageMethodsOwner, arguments);
 
 				_modifyMethodsOwnerByExposingOrHidingSomeMethods();
@@ -445,9 +445,9 @@ function WulechuanApplyOneStageOneMethodProgrammingPatternToMethodsOwner(stageMe
 	}
 
 	function abort() {
-		if (currentStageIndex >= 0) {
+		if (indexOfCurrentStage >= 0) {
 			theExecutionIsStopped = true;
-			console.error('The process is stopped at stage', currentStageIndex);
+			console.error('The process is stopped at stage', indexOfCurrentStage);
 		} else {
 			console.info('The execution process has not started yet.');
 		}
@@ -455,11 +455,11 @@ function WulechuanApplyOneStageOneMethodProgrammingPatternToMethodsOwner(stageMe
 
 	function _modifyMethodsOwnerByExposingOrHidingSomeMethods() {
 		_hideMethodsOfAllPastOrSkippedStagesIncludingCurrentStage();
-		_exposeMethodsOfAllStagesTillFirstRequiredStageStartingWithIndex(currentStageIndex+1);
+		_exposeMethodsOfAllStagesTillFirstRequiredStageStartingWithIndex(indexOfCurrentStage+1);
 	}
 
 	function _hideMethodsOfAllPastOrSkippedStagesIncludingCurrentStage() {
-		for (var si = 0; si <= currentStageIndex; si++) {
+		for (var si = 0; si <= indexOfCurrentStage; si++) {
 			var stage = allStages[si];
 			var actionAliasesInAllLanguages = stage.actionAliases;
 			var actionAliasesInActuallyUsingLanuage =
@@ -490,7 +490,7 @@ function WulechuanApplyOneStageOneMethodProgrammingPatternToMethodsOwner(stageMe
 		var si, stage;
 		for (si = startingStageIndex; si < allStages.length-1; si++) {
 			stage = allStages[si];
-			if (!stage.allowsToSkip) {
+			if ( ! stage.allowsToSkip) {
 				endingExclusiveStageIndex = si+1;
 				break;
 			}

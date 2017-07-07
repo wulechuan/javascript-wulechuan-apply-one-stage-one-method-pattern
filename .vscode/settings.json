@@ -3,5 +3,7 @@
     "files.exclude": {
         "**/.DS_Store": true
         , "node_modules": true
-    }
+    },
+    "express.portNumber": 8383,
+    "express.relativeRoot": "examples/example-001/"
 }

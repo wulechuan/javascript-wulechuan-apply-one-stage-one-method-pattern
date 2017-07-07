@@ -1,4 +1,4 @@
-module.exports = WulechuanApplyOneStageOneMethodProgrammingPatternTo;
+module.exports = WulechuanApplyOneStageOneMethodProgrammingPatternToMethodsOwner;
 
 /**
  * @author 吴乐川 <wulechuan@live.com>
@@ -208,7 +208,7 @@ module.exports = WulechuanApplyOneStageOneMethodProgrammingPatternTo;
  * @param {!object} stagesOperator - The object to apply staged-methods pattern to.
  */
 // eslint-disable-next-line
-function WulechuanApplyOneStageOneMethodProgrammingPatternTo(stageMethodsOwner, initialPreferredLanguage) {
+function WulechuanApplyOneStageOneMethodProgrammingPatternToMethodsOwner(stageMethodsOwner, initialPreferredLanguage) {
 	var methodName_addStage = 'addStage';
 	var methodName_setPreferredNaturalLanguageTo = 'setPreferredNaturalLanguageTo';
 	var methodName_startFromFirstStage = 'startFromFirstStage';

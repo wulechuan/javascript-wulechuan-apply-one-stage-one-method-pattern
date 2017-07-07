@@ -1,0 +1,52 @@
+const examplesJavaScriptsMatchingPattern = 'examples/**/index.js';
+
+
+
+
+
+const glob = require('glob');
+const pathTool = require('path');
+
+const allEntries = (function buildMultipleWebpackEntries(patternsArray) {
+	function processOnePattern(pattern) {
+		const matchedEntriesArray = glob.sync(pattern);
+		matchedEntriesArray.forEach(entry => {
+			const nearistFolderName = pathTool.dirname(entry).split(pathTool.sep).pop();
+			allEntriesInRelativePaths[nearistFolderName] = entry;
+			allEntries[nearistFolderName] = pathTool.resolve(__dirname, entry);
+		});
+	}
+
+	const allEntries = {};
+	const allEntriesInRelativePaths = {}; // for better printing
+
+	patternsArray.forEach(pattern => {
+		processOnePattern(pattern);
+	});
+
+
+	console.log('All entries for webpack:');
+	console.log(JSON.stringify(allEntriesInRelativePaths, null, '\t'));
+
+	return allEntries;
+})([
+	examplesJavaScriptsMatchingPattern
+]);
+
+module.exports = {
+	entry: allEntries,
+	output: {
+		path: pathTool.resolve(__dirname, 'examples'),
+		filename: '[name]/webpack-bundle.js'
+	},
+	rules: [
+		{
+			test: /\.js$/,
+			exclude: [
+				pathTool.resolve(__dirname, 'node_modules')
+			],
+			use: ['source-map-loader'],
+			enforce: 'pre'
+		}
+	]
+};

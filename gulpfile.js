@@ -1,15 +1,19 @@
 const productionSourceGlobJs = ['source/**/*.js'];
+const examplesFolder = 'examples';
+const examplesGlobs = [examplesFolder+'/**/*.js'];
 const productionBuildFolder = 'build';
 const readMeStartRegExp = new RegExp('(\\* \\s*\\-{3,} readme start \\-{3,}\\s*)\\n', 'i');
 const readMeEndRegExp   = new RegExp('(\\* \\s*\\-{3,} readme end \\-{3,}\\s*)\\n', 'i');
 
-const allSourceGlobsToWatch = productionSourceGlobJs;
+const allSourceGlobsToWatch = productionSourceGlobJs.concat(
+	[examplesFolder + '/**/index.*']
+);
 
 const globsToClearBeforeRebuilding = [
-	productionBuildFolder
+	productionBuildFolder,
+	examplesFolder + '/**/webpack*.js',
+	examplesFolder + '/**/*.js.map'
 ];
-
-
 
 
 const processArguments = require('minimist')(process.argv.slice(2));
@@ -20,7 +24,9 @@ const replaceFileContent = require('gulp-change');
 const renameFiles = require('gulp-rename');
 const runTasksInSequence = require('gulp-sequence');
 const minifyJs = require('gulp-uglify');
+const pathTool = require('path');
 const pump = require('pump');
+const webpack = require('webpack-stream');
 
 
 const isToBuildForRelease = isRunningInReleasingMode(processArguments);
@@ -49,10 +55,6 @@ function isRunningInReleasingMode(processArguments) {
 
 	return false;
 }
-
-
-
-
 
 (function 构建README() {
 	gulp.task('build: readme', (thisTaskIsDone) => {
@@ -145,13 +147,23 @@ function isRunningInReleasingMode(processArguments) {
 		return deleteFiles(globsToClearBeforeRebuilding);
 	});
 
+	gulp.task('webpack: examples', () => {
+		return gulp.src(examplesGlobs)
+			.pipe(webpack(require('./webpack.config.js')))
+			.pipe(gulp.dest(pathTool.join(
+				examplesFolder
+			)))
+			;
+	});
+
 	gulp.task('build: all', (thisTaskIsDone) => {
 		var tasksToRun = [
 			'clear old build',
 			[
 				'build: readme',
 				'build: js: all'
-			]
+			],
+			'webpack: examples'
 		];
 
 		runTasksInSequence.apply(null, tasksToRun)(thisTaskIsDone);

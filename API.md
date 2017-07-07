@@ -107,7 +107,7 @@ Might be any of below:
 
 	// or
 	stageOperator.addStage(
-		anotherFunction,
+		aThirdFunction,
 		'youCanNotSkipMe'
 	);
 

@@ -220,7 +220,7 @@ function WulechuanApplyOneStageOneMethodProgrammingPatternToMethodsOwner(stageMe
 	var methodName_startFromFirstStage = 'startFromFirstStage';
 	var methodName_abort = 'abort';
 
-	var thisManagerOfStages = this;
+	var thisOperatorOfStages = this;
 
 	var allStages = [];
 	var indexOfCurrentStage = NaN;
@@ -235,9 +235,9 @@ function WulechuanApplyOneStageOneMethodProgrammingPatternToMethodsOwner(stageMe
 		preferredLanguage = initialPreferredLanguage;
 	} 
 
-	thisManagerOfStages[methodName_addStage] = addFirstStage;
-	thisManagerOfStages[methodName_setPreferredNaturalLanguageTo] = setPreferredNaturalLanguageTo;
-	thisManagerOfStages[methodName_abort] = abort;
+	thisOperatorOfStages[methodName_addStage] = addFirstStage;
+	thisOperatorOfStages[methodName_setPreferredNaturalLanguageTo] = setPreferredNaturalLanguageTo;
+	thisOperatorOfStages[methodName_abort] = abort;
 
 
 
@@ -324,9 +324,9 @@ function WulechuanApplyOneStageOneMethodProgrammingPatternToMethodsOwner(stageMe
 
 	function addFirstStage(/* stageAction, thisStageCanBeSkipped, actionAliasesInAllLanguages */) {
 		theExecutionIsAborted = false;
-		addStage.apply(thisManagerOfStages, arguments);
-		thisManagerOfStages[methodName_addStage] = addStage;
-		thisManagerOfStages[methodName_setPreferredNaturalLanguageTo] = setPreferredNaturalLanguageTo;
+		addStage.apply(thisOperatorOfStages, arguments);
+		thisOperatorOfStages[methodName_addStage] = addStage;
+		thisOperatorOfStages[methodName_setPreferredNaturalLanguageTo] = setPreferredNaturalLanguageTo;
 		_tryToExposeFirstStageSoThatTheOperatorIsUsable();
 	}
 
@@ -478,7 +478,7 @@ function WulechuanApplyOneStageOneMethodProgrammingPatternToMethodsOwner(stageMe
 
 		// Expose the method of the first stage with the common name,
 		// a.k.a. the "startFromFirstStage" according to the default configuration.
-		thisManagerOfStages[methodName_startFromFirstStage] = startFromFirstStage;
+		thisOperatorOfStages[methodName_startFromFirstStage] = startFromFirstStage;
 
 		// Also expose it with aliases.
 		_exposeMethodsOfStagesWithIndexBetween(0, 1);

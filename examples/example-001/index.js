@@ -1,6 +1,5 @@
 var WulechuanApplyStagesPatternToMethodsOwner =
-	require('../../source/wulechuan-one-method-one-stage-pattern-builder');
-// console.log(wulechuanApplyStagesPatternToMethodsOwner);
+	require('@wulechuan/apply-one-stage-one-method-pattern');
 
 
 function A(initName) {

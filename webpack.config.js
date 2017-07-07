@@ -3,9 +3,9 @@ const examplesJavaScriptsMatchingPattern = 'examples/**/index.js';
 
 
 
-
 const glob = require('glob');
 const pathTool = require('path');
+const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 
 const allEntries = (function buildMultipleWebpackEntries(patternsArray) {
 	function processOnePattern(pattern) {
@@ -51,5 +51,8 @@ module.exports = {
 			use: ['source-map-loader'],
 			enforce: 'pre'
 		}
+	],
+	plugins: [
+		new UglifyJSPlugin()
 	]
 };

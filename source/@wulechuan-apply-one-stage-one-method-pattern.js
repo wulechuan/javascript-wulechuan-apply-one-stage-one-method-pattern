@@ -213,7 +213,6 @@ module.exports = WulechuanApplyOneStageOneMethodProgrammingPatternToMethodsOwner
  * 
  * @param {!object} stagesOperator - The object to apply staged-methods pattern to.
  */
-// eslint-disable-next-line
 function WulechuanApplyOneStageOneMethodProgrammingPatternToMethodsOwner(stageMethodsOwner, initialPreferredLanguage) {
 	var methodName_addStage = 'addStage';
 	var methodName_setPreferredNaturalLanguageTo = 'setPreferredNaturalLanguageTo';

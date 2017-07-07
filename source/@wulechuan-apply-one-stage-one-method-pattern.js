@@ -224,7 +224,7 @@ function WulechuanApplyOneStageOneMethodProgrammingPatternToMethodsOwner(stageMe
 
 	var allStages = [];
 	var indexOfCurrentStage = NaN;
-	var theExecutionIsStopped; // Maybe it's some errors occurred.
+	var theExecutionIsAborted; // Maybe it's some errors occurred.
 
 	var knownLanguagesSoFar = [];
 	var knownLanguagesIndicesSoFar = {}; // Simply for easy avoiding duplications
@@ -293,7 +293,7 @@ function WulechuanApplyOneStageOneMethodProgrammingPatternToMethodsOwner(stageMe
 			actionAliases: examinedAliasesInAllLanguages,
 			allowsToSkip: thisStageCanBeSkipped,
 			action: function () {
-				if (theExecutionIsStopped) {
+				if (theExecutionIsAborted) {
 					if (indexOfThisNewStage === allStages.length-1) {
 						return; // Return undefined if errors occured. Need more think.
 					} else {
@@ -323,7 +323,7 @@ function WulechuanApplyOneStageOneMethodProgrammingPatternToMethodsOwner(stageMe
 	}
 
 	function addFirstStage(/* stageAction, thisStageCanBeSkipped, actionAliasesInAllLanguages */) {
-		theExecutionIsStopped = false;
+		theExecutionIsAborted = false;
 		addStage.apply(thisManagerOfStages, arguments);
 		thisManagerOfStages[methodName_addStage] = addStage;
 		thisManagerOfStages[methodName_setPreferredNaturalLanguageTo] = setPreferredNaturalLanguageTo;
@@ -446,7 +446,7 @@ function WulechuanApplyOneStageOneMethodProgrammingPatternToMethodsOwner(stageMe
 
 	function abort() {
 		if (indexOfCurrentStage >= 0) {
-			theExecutionIsStopped = true;
+			theExecutionIsAborted = true;
 			console.error('The process is stopped at stage', indexOfCurrentStage);
 		} else {
 			console.info('The execution process has not started yet.');

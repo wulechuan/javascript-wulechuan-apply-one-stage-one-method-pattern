@@ -44,181 +44,329 @@
 /* 0 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var WulechuanApplyStagesPatternToMethodsOwner =
-		__webpack_require__(1);
+	var 吴乐川的执行路线 = __webpack_require__(1);
 
+	var 为测试之便不隐藏任何方法函数 = true;
+	var 实验对象壹 = new 实验类(为测试之便不隐藏任何方法函数);
 
-	function A(initName) {
-		var privateThing = 'secret';
-		var privateThingAccessingCount = 0;
+	// 曝露以下对象和类，以便在浏览器控制台中进一步把玩。
+	window.乐川的执行路线 = 吴乐川的执行路线;
+	window.实验对象壹 = 实验对象壹;
 
-		this.name = initName;
-		this.methodInNeitherRoutes = function () {
-			console.log('I alwasy exist.', _getPrivateThing());
-		};
-		this.method_1_1 = function () {
-			console.log('You will never be able to use me, because the "aStagesRoute1" will overwrite me');
-		};
+	实验针对(实验对象壹);
 
-		var aStagesRoute1 = new WulechuanApplyStagesPatternToMethodsOwner(this, 'en-US');
-		var aStagesRoute2 = new WulechuanApplyStagesPatternToMethodsOwner(this, 'en-US');
+	// 主体程序结束于此
 
 
 
-		aStagesRoute1.addStage(methodInRoute1Stage1, {
-			'en-US': 'method_1_1'
-		});
-
-		aStagesRoute1.addStage(methodInRoute1Stage2, {
-			'en-US': 'method_1_2'
-		});
-
-		aStagesRoute1.addStage(methodThatIsSharedBetweenTwoRoutes, {
-			'en-US': 'method_shared'
-		});
 
 
 
-		aStagesRoute2.addStage(methodInRoute2Stage1, {
-			'en-US': 'method_2_1'
-		});
 
-		aStagesRoute2.addStage(methodThatIsSharedBetweenTwoRoutes, {
-			'en-US': 'method_shared'
-		});
+	function 列示某对象目前所有方法函数(对象, 对象称呼) {
+		var 每行日志之前缀 = '\n\t';
 
-		aStagesRoute2.addStage(methodInRoute2Stage3, {
-			'en-US': 'method_2_3'
-		});
-
-
-
-		function methodInRoute1Stage1() { _logInvocationOf('Route 1 > Stage 1'); }
-		function methodInRoute1Stage2() { _logInvocationOf('Route 1 > Stage 2'); }
-		function methodInRoute2Stage1() { _logInvocationOf('Route 2 > Stage 1'); }
-		function methodInRoute2Stage3() { _logInvocationOf('Route 2 > Stage 3'); }
-		function methodThatIsSharedBetweenTwoRoutes() { _logInvocationOf('Shared Method [ Note that the two routes are even sharing the method name! ]'); }
-
-		function _getPrivateThing() {
-			privateThingAccessingCount++;
-			return '\n\t' + privateThing + ' ' + privateThingAccessingCount;
-		}
-
-		function _logInvocationOf(methodCaption) {
-			console.log('\n\nInvoking method: ' + methodCaption + ':', _getPrivateThing(), '\n\n');
-		}
-	}
-
-	function logMethodsOf(obj, caption) {
-		var prefixPerLine = '\n\t';
-
-		if (!caption || typeof caption !== 'string') {
-			caption = '';
+		if (!对象称呼 || typeof 对象称呼 !== 'string') {
+			对象称呼 = '';
 		} else {
-			caption = ' "' + caption.trim() + '"';
+			对象称呼 = '【' + 对象称呼.trim() + '】';
 		}
 
-		var logStringSegments = [
+		var 方法函数名列表日志片断集 = [
 			''
 		];
 
-		for (var key in obj) {
-			var attr = obj[key];
-			if (typeof attr === 'function') {
-				logStringSegments.push(key);
+		for (var 属性名 in 对象) {
+			var 属性 = 对象[属性名];
+			if (typeof 属性 === 'function') {
+				方法函数名列表日志片断集.push(属性名);
 			}
 		}
 
-		console.log('Object' + caption + ' has these methods:', logStringSegments.join(prefixPerLine), '\n\n');
+		console.log(
+			(对象称呼 || '无名对象') + '目前有下列方法函数：',
+			方法函数名列表日志片断集.join(每行日志之前缀), '\n\n'
+		);
 	}
 
 
 
 
 
+	function 实验类(为测试之便不隐藏任何方法函数) {
+		var 地支 = ['子', '丑', '寅', '卯', '辰', '巳', '午', '未', '申', '酉', '戌', '亥'];
+		var 汉语大写数字 = ['壹', '贰', '叁', '肆', '伍', '陆', '柒', '捌', '玖', '拾'];
 
-	var a = new A('wulechuan');
+		var 执行路线名称之一 = '甲';
+		var 执行路线名称之二 = '乙';
+		var 通用方法名之前缀 = '通用动作';
 
-	// Expose these for we to tweak them more in the browser console.
-	window.WulechuanApplyStagesPatternToMethodsOwner = WulechuanApplyStagesPatternToMethodsOwner;
-	window.a = a;
+		var 本实验实例 = this;
+		var 自动生成的多组函数 = _生成多组函数备用();
+		var 公用之最终动作 = _生成一个备用函数('动作·终');
 
-
-
-
-
-	console.group('At beginning');
-	logMethodsOf(a, 'a');
-	console.groupEnd();
-
-
-
-	a['method_1_1']();
-	console.group('After invocation of route1 method1');
-	logMethodsOf(a, 'a');
-	console.log('Note that the "method_1_1" disappears, while the "method_1_2" appears.');
-	console.groupEnd();
+		_定义执行路线甲();
+		_定义执行路线乙();
 
 
 
 
-	a['method_2_1']();
-	console.group('After invocation of route2 method1');
-	logMethodsOf(a, 'a');
-	console.groupEnd();
+
+		function _生成一个备用函数(方法名称) {
+			var 函数本体 = function () {
+				console.log('\n实验对象刚刚调用了其【'+方法名称+'】方法函数。\n\n');
+			};
+
+			return 函数本体;
+		}
+
+		function _生成多组函数备用() {
+			var 自动生成的多组函数 = {};
+			var 函数系列名称;
 
 
 
-	a['method_shared']();
-	console.group('After invocation of shared method in route 2');
-	logMethodsOf(a, 'a');
-	console.groupEnd();
+			函数系列名称 = 执行路线名称之一;
+			自动生成的多组函数 [ 函数系列名称 ] = [];
+
+			地支.forEach(当前地支 => {
+				自动生成的多组函数 [ 函数系列名称 ] [ 当前地支 ] =
+					_生成一个备用函数(函数系列名称+'·'+当前地支);
+			});
 
 
 
-	// Delibrately delay the route 1.
-	a['method_1_2']();
-	console.group('After invocation of route1 method2');
-	logMethodsOf(a, 'a');
-	console.groupEnd();
+			函数系列名称 = 执行路线名称之二;
+			自动生成的多组函数 [ 函数系列名称 ] = [];
+
+			地支.forEach(当前地支 => {
+				自动生成的多组函数 [ 函数系列名称 ] [ 当前地支 ] =
+					_生成一个备用函数(函数系列名称+'·'+当前地支);
+			});
 
 
 
-	a['method_2_3']();
-	console.group('After invocation of route2 method3');
-	logMethodsOf(a, 'a');
-	console.groupEnd();
+			函数系列名称 = 通用方法名之前缀;
+			自动生成的多组函数 [ 函数系列名称 ] = [];
+
+			汉语大写数字.forEach(当前数字 => {
+				自动生成的多组函数 [ 函数系列名称 ] [ 当前数字 ] =
+					_生成一个备用函数(函数系列名称+'·'+当前数字+'');
+			});
 
 
 
-	console.group('Finally');
-	console.log(
-		'Finally let\'s try to invoke the shared method, **AGAIN**!',
-		'\nBecause we had thought that the version in the route 1 were preserved.'
-	);
-	console.warn('But that\'s simply **NOT** the case. And an error will throw.');
-	console.info(
-		'Because the same method name should always mean the exactly the same thing.',
-		'\nSince the "method_shared" method has been invoked via the route 2,',
-		'\nIt is our responsibility to make sure that there are no route meaning chaos.',
-		'\nThe example above is simply **not right**.'
-	);
-
-	console.info(
-		'\nBesides, generally, although we can design more than one routes for an object,',
-		'\nor even share the same function as the stepping method across routes,'
-	);
-	console.warn(
-		'we shall not mixing up the execution of these routes,',
-		'\nOtherwise, why routes?'
-	);
+			return 自动生成的多组函数;
+		}
 
 
-	console.log('\n\nNow let\'s "welcome" our TypeError:');
-	a['method_shared']();
+		function _在给定执行路线上定义一个方法(执行路线, 方法名, 函数本体) {
+			if (为测试之便不隐藏任何方法函数) {
+				本实验实例[方法名] = 函数本体;
+			} else {
+				执行路线.设有步骤(函数本体, { 'zh-CN': 方法名 });
+			}
+		}
+
+		function _定义执行路线甲() {
+			var 执行路线名 = 执行路线名称之一;
 
 
-	// console.groupEnd(); // won't reach here
+
+			var 本系列函数之索引 = 执行路线名;
+			var 本系列方法本名之前缀 = '动作'+执行路线名;
+			var 本函数系列 = 自动生成的多组函数 [ 本系列函数之索引 ];
+
+			var 通用函数系列之索引 = 通用方法名之前缀;
+			var 通用函数系列 = 自动生成的多组函数 [ 通用函数系列之索引 ];
+
+
+
+			var 执行路线;
+			
+			if ( ! 为测试之便不隐藏任何方法函数) {
+				执行路线 = new 吴乐川的执行路线(本实验实例, 'zh-CN');
+			}
+
+
+
+			var 方法本名, 方法名, 函数本体;
+
+
+			方法本名 = '子';
+			方法名 = 本系列方法本名之前缀+方法本名;
+			函数本体 = 本函数系列 [ 方法本名 ];
+			_在给定执行路线上定义一个方法(执行路线, 方法名, 函数本体);
+
+			方法本名 = '丑';
+			方法名 = 本系列方法本名之前缀+方法本名;
+			函数本体 = 本函数系列 [ 方法本名 ];
+			_在给定执行路线上定义一个方法(执行路线, 方法名, 函数本体);
+
+			方法本名 = '寅';
+			方法名 = 本系列方法本名之前缀+方法本名;
+			函数本体 = 本函数系列 [ 方法本名 ];
+			_在给定执行路线上定义一个方法(执行路线, 方法名, 函数本体);
+
+			方法本名 = '卯';
+			方法名 = 本系列方法本名之前缀+方法本名;
+			函数本体 = 本函数系列 [ 方法本名 ];
+			_在给定执行路线上定义一个方法(执行路线, 方法名, 函数本体);
+
+
+
+			方法本名 = '壹';
+			方法名 = 通用方法名之前缀+方法本名;
+			函数本体 = 通用函数系列 [ 方法本名 ];
+			_在给定执行路线上定义一个方法(执行路线, 方法名, 函数本体);
+
+
+
+			方法本名 = '贰';
+			方法名 = 通用方法名之前缀+方法本名;
+			函数本体 = 通用函数系列 [ 方法本名 ];
+			_在给定执行路线上定义一个方法(执行路线, 方法名, 函数本体);
+
+
+
+			方法本名 = '叁';
+			方法名 = 通用方法名之前缀+方法本名;
+			函数本体 = 通用函数系列 [ 方法本名 ];
+			_在给定执行路线上定义一个方法(执行路线, 方法名, 函数本体);
+
+
+
+			方法本名 = '肆';
+			方法名 = 通用方法名之前缀+方法本名;
+			函数本体 = 通用函数系列 [ 方法本名 ];
+			_在给定执行路线上定义一个方法(执行路线, 方法名, 函数本体);
+
+
+
+			函数本体 = 公用之最终动作;
+			_在给定执行路线上定义一个方法(执行路线, '动作终', 函数本体);
+
+			// console.log(执行路线);
+			// console.log(本实验实例);
+		}
+
+		function _定义执行路线乙() {
+			var 执行路线名 = 执行路线名称之一;
+
+
+
+			var 本系列函数之索引 = 执行路线名;
+			var 本系列方法本名之前缀 = '动作'+执行路线名;
+			var 本函数系列 = 自动生成的多组函数 [ 本系列函数之索引 ];
+
+			var 通用函数系列之索引 = 通用方法名之前缀;
+			var 通用函数系列 = 自动生成的多组函数 [ 通用函数系列之索引 ];
+
+
+
+			var 执行路线;
+			
+			if ( ! 为测试之便不隐藏任何方法函数) {
+				执行路线 = new 吴乐川的执行路线(本实验实例, 'zh-CN');
+			}
+
+
+
+			var 方法本名, 方法名, 函数本体;
+
+
+			方法本名 = '子';
+			方法名 = 本系列方法本名之前缀+方法本名;
+			函数本体 = 本函数系列 [ 方法本名 ];
+			_在给定执行路线上定义一个方法(执行路线, 方法名, 函数本体);
+
+
+
+			方法本名 = '壹';
+			方法名 = 通用方法名之前缀+方法本名;
+			函数本体 = 通用函数系列 [ 方法本名 ];
+			_在给定执行路线上定义一个方法(执行路线, 方法名, 函数本体);
+
+
+
+			方法本名 = '贰';
+			方法名 = 通用方法名之前缀+方法本名;
+			函数本体 = 通用函数系列 [ 方法本名 ];
+			_在给定执行路线上定义一个方法(执行路线, 方法名, 函数本体);
+
+
+
+			方法本名 = '叁';
+			方法名 = 通用方法名之前缀+方法本名;
+			函数本体 = 通用函数系列 [ 方法本名 ];
+			_在给定执行路线上定义一个方法(执行路线, 方法名, 函数本体);
+
+
+
+			方法本名 = '肆';
+			方法名 = 通用方法名之前缀+方法本名;
+			函数本体 = 通用函数系列 [ 方法本名 ];
+			_在给定执行路线上定义一个方法(执行路线, 方法名, 函数本体);
+
+
+
+			函数本体 = 公用之最终动作;
+			_在给定执行路线上定义一个方法(执行路线, '动作终', 函数本体);
+
+			// console.log(执行路线);
+			// console.log(本实验实例);
+		}
+	}
+
+
+
+
+
+	function 实验针对(实验对象) { // 实验全过程
+		// console.log(实验对象);
+
+		var 实验对象之称呼 = '某测试对象';
+		var 话术之调用某某方法之后 = '调用之后：';
+		var 方法名;
+
+
+		console.group('起初:');
+		列示某对象目前所有方法函数(实验对象, 实验对象之称呼);
+		console.groupEnd();
+
+
+		方法名 = '动作甲子';
+		实验对象 [ 方法名 ] (); // 调用之
+		console.group('【'+方法名+'】'+话术之调用某某方法之后);
+		列示某对象目前所有方法函数(实验对象, 实验对象之称呼);
+		console.groupEnd();
+
+
+		方法名 = '动作甲丑';
+		实验对象 [ 方法名 ] (); // 调用之
+		console.group('【'+方法名+'】'+话术之调用某某方法之后);
+		列示某对象目前所有方法函数(实验对象, 实验对象之称呼);
+		console.groupEnd();
+
+
+		方法名 = '动作序列：甲寅 > 甲卯 > 通用壹 > 通用二 > 通用叁';
+		实验对象 [ '动作甲寅' ] (); // 调用之
+		实验对象 [ '动作甲卯' ] (); // 调用之
+		实验对象 [ '通用动作壹' ] (); // 调用之
+		实验对象 [ '通用动作贰' ] (); // 调用之
+		实验对象 [ '通用动作叁' ] (); // 调用之
+		console.group('【'+方法名+'】'+话术之调用某某方法之后);
+		列示某对象目前所有方法函数(实验对象, 实验对象之称呼);
+		console.groupEnd();
+
+
+		// 方法名 = '动作乙子';
+		// 实验对象 [ 方法名 ] (); // 调用之
+		// console.group('【'+方法名+'】'+话术之调用某某方法之后);
+		// 列示某对象目前所有方法函数(实验对象, 实验对象之称呼);
+		// console.groupEnd();
+	}
+
 
 /***/ }),
 /* 1 */

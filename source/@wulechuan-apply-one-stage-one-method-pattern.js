@@ -13,7 +13,7 @@ module.exports = WulechuanApplyOneStageOneMethodProgrammingPatternToMethodsOwner
  * 
  * # 介绍
  * 
- * 凡由本类构建的实例对象，可用于将本人设计的一种程序设计模式应用至另一“受体”对象。
+ * 凡由本类构建的实例对象，可用于将本人设计的一种程序设计模式应用至另一“受体（target）”对象。
  * “受体”因而被改造，其各个所涉及之方法函数均被依次对应于各自的所谓“执行阶段”，亦可称“步骤”，
  * 每个方法函数对应一个步骤。
  * 自此时起，仅第一个步骤所对应的方法函数被公开（或称“曝露”），
@@ -214,10 +214,36 @@ module.exports = WulechuanApplyOneStageOneMethodProgrammingPatternToMethodsOwner
  * @param {!object} stagesOperator - The object to apply staged-methods pattern to.
  */
 function WulechuanApplyOneStageOneMethodProgrammingPatternToMethodsOwner(stageMethodsOwner, initialPreferredLanguage) {
-	var methodName_addStage = 'addStage';
-	var methodName_setPreferredNaturalLanguageTo = 'setPreferredNaturalLanguageTo';
-	var methodName_startFromFirstStage = 'startFromFirstStage';
-	var methodName_abort = 'abort';
+	var methodNames_addStage = [
+		'设有步骤',
+		'添加步骤',
+		'addStage'
+	];
+
+	var methodNames_setPreferredNaturalLanguageTo = [
+		'优先采用该语言',
+		'优先使用该语言',
+		'setPreferredNaturalLanguageTo'
+	];
+
+	var methodNames_abort = [
+		'中止',
+		'中断',
+		'停止',
+		'abort',
+		'stop'
+	];
+
+	var methodNames_startFromFirstStage = [
+		'从头开始',
+		'开始',
+		'startFromFirstStage',
+		'start'
+	];
+
+
+
+
 
 	var thisOperatorOfStages = this;
 
@@ -234,9 +260,20 @@ function WulechuanApplyOneStageOneMethodProgrammingPatternToMethodsOwner(stageMe
 		preferredLanguage = initialPreferredLanguage;
 	} 
 
-	thisOperatorOfStages[methodName_addStage] = addFirstStage;
-	thisOperatorOfStages[methodName_setPreferredNaturalLanguageTo] = setPreferredNaturalLanguageTo;
-	thisOperatorOfStages[methodName_abort] = abort;
+	_exposeMethodsOfTheOperatorItsOwn(
+		addFirstStage,
+		methodNames_addStage
+	);
+
+	_exposeMethodsOfTheOperatorItsOwn(
+		setPreferredNaturalLanguageTo,
+		methodNames_setPreferredNaturalLanguageTo
+	);
+
+	_exposeMethodsOfTheOperatorItsOwn(
+		abort,
+		methodNames_abort
+	);
 
 
 
@@ -244,6 +281,29 @@ function WulechuanApplyOneStageOneMethodProgrammingPatternToMethodsOwner(stageMe
 
 	function _isAUsableArray(subject) {
 		return Array.isArray(subject) && subject.length > 0;
+	}
+
+
+	/**
+	 * Expose a method via several alias on the operator its own,
+	 * instead of a method on the target object to operate on.
+	 * @param {!function} _methodFunction 
+	 * @param {!array} _methodAliases 
+	 */
+	function _exposeMethodsOfTheOperatorItsOwn(_methodFunction, _methodAliases) {
+		for (var _i=0; _i<_methodAliases.length; _i++) {
+			var _alias = _methodAliases[_i];
+			thisOperatorOfStages[_alias] = _methodFunction;
+		}
+	}
+
+	function _hideMethodsOfTheseAliases(_methodAliases) {
+		for (var _i=0; _i<_methodAliases.length; _i++) {
+			var _alias = _methodAliases[_i];
+			if (thisOperatorOfStages[_alias]) {
+				delete thisOperatorOfStages[_alias];
+			}
+		}
 	}
 
 
@@ -257,7 +317,7 @@ function WulechuanApplyOneStageOneMethodProgrammingPatternToMethodsOwner(stageMe
 	 * -	@param {?array} actionAliases[languageCode2] - An array that contains aliases of the method that presenting a stage, in a specific language.
 	 * -	@param {?array} actionAliases['zh-CN'] - An array that contains aliases of the method that presenting a stage, in Chinese.
 	 */
-	function addStage(stageAction, thisStageCanBeSkipped, actionAliasesInAllLanguages) {
+	function addOneStageToTargetObject(stageAction, thisStageCanBeSkipped, actionAliasesInAllLanguages) {
 		if (typeof stageAction !== 'function') {
 			throw TypeError(
 				'A so-called stage is basically a function, '+
@@ -323,10 +383,14 @@ function WulechuanApplyOneStageOneMethodProgrammingPatternToMethodsOwner(stageMe
 
 	function addFirstStage(/* stageAction, thisStageCanBeSkipped, actionAliasesInAllLanguages */) {
 		theExecutionIsAborted = false;
-		addStage.apply(thisOperatorOfStages, arguments);
-		thisOperatorOfStages[methodName_addStage] = addStage;
-		thisOperatorOfStages[methodName_setPreferredNaturalLanguageTo] = setPreferredNaturalLanguageTo;
-		_tryToExposeFirstStageSoThatTheOperatorIsUsable();
+		addOneStageToTargetObject.apply(thisOperatorOfStages, arguments);
+
+		_exposeMethodsOfTheOperatorItsOwn(
+			addOneStageToTargetObject,
+			methodNames_addStage
+		);
+
+		_tryToExposeFirstStageSoThatTheTargetIsUsable();
 	}
 
 	function _examineProvidedActionAliases(actionAliasesInAllLanguages) {
@@ -432,11 +496,11 @@ function WulechuanApplyOneStageOneMethodProgrammingPatternToMethodsOwner(stageMe
 	}
 
 	function setPreferredNaturalLanguageTo(language) {
-		if ( ! language) {
+		if ( ! language || typeof language !== 'string') {
 			throw TypeError('Must specify the natural language to use.');
 		}
 		preferredLanguage = language;
-		_tryToExposeFirstStageSoThatTheOperatorIsUsable();
+		_tryToExposeFirstStageSoThatTheTargetIsUsable();
 	}
 
 	function startFromFirstStage() {
@@ -471,13 +535,13 @@ function WulechuanApplyOneStageOneMethodProgrammingPatternToMethodsOwner(stageMe
 		}
 	}
 
-	function _tryToExposeFirstStageSoThatTheOperatorIsUsable() {
+	function _tryToExposeFirstStageSoThatTheTargetIsUsable() {
 		if (allStages.length < 1) return;
 		if ( ! preferredLanguage) return;
 
 		// Expose the method of the first stage with the common name,
 		// a.k.a. the "startFromFirstStage" according to the default configuration.
-		thisOperatorOfStages[methodName_startFromFirstStage] = startFromFirstStage;
+		_exposeMethodsOfTheOperatorItsOwn(startFromFirstStage, methodNames_startFromFirstStage);
 
 		// Also expose it with aliases.
 		_exposeMethodsOfStagesWithIndexBetween(0, 1);

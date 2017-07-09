@@ -37,7 +37,15 @@ Generally, the operator helps the methods owner, by exposing or hiding some meth
 
 ## Methods
 
-### addStage
+### \<method\> **addStage**
+
+#### Aliases
+
+- 设有步骤
+- 添加步骤
+- addStage
+
+#### Description
 
 Define a stage for a provided function. When the time(stage) is correct, the function will then be attached to the methods owner, exposed as a method of its.
 
@@ -111,9 +119,24 @@ Might be any of below:
 		'youCanNotSkipMe'
 	);
 
+	// or
+	stageOperator.设有步骤(
+		步骤函数本体,
+		'我是第四个步骤' // in English, this means "I am the fourth step, or stage."
+	);
 
 
-### setPreferredNaturalLanguageTo
+
+
+### \<method\> **setPreferredNaturalLanguageTo**
+
+#### Aliases
+
+- 优先采用该语言
+- 优先使用该语言
+- setPreferredNaturalLanguageTo
+
+#### Description
 
 Set the preferred language to use.
 
@@ -131,9 +154,22 @@ Set the preferred language to use.
 
 	stageOperator.setPreferredNaturalLanguageTo('en-US');
 
+	// another example
+	stageOperator.优先采用该语言('zh-CN');
 
 
-### startFromFirstStage
+
+
+### \<method\> **startFromFirstStage**
+
+#### Aliases
+
+- 从头开始
+- 开始
+- startFromFirstStage
+- start
+
+#### Description
 
 Start the execution chain on the methods owner.
 
@@ -149,10 +185,23 @@ None.
 
 	stageOperator.startFromFirstStage();
 
+	// another example
+	stageOperator.从头开始();
 
 
 
-### abort
+
+### \<method\> **abort**
+
+#### Aliases
+
+- 中止
+- 中断
+- 停止
+- abort
+- stop
+
+#### Description
 
 Stop the execution chain on the methods owner.
 If this method of the **operator** is invoked, all methods for all subsequence stages of the owner will be skipped.
@@ -174,5 +223,8 @@ None.
 #### Usage
 
 	stageOperator.abort();
+
+	// another example
+	stageOperator.中止();
 
 

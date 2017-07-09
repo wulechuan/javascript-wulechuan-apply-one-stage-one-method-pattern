@@ -5,6 +5,12 @@ module.exports = WulechuanApplyOneStageOneMethodProgrammingPatternToMethodsOwner
  * 
  * ----- readme start -----
  * 
+ * # THIS IS NOT READY FOR USAGE!
+ * 
+ * # THIS IS NOT READY FOR USAGE!
+ * 
+ * # THIS IS NOT READY FOR USAGE!
+ * 
  * # npm
  * 
  * [@wulechuan/apply-one-stage-one-method-pattern](https://www.npmjs.com/package/@wulechuan/apply-one-stage-one-method-pattern)

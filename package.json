@@ -8,7 +8,8 @@
     "release": "gulp --release",
     "rel": "npm run release",
     "prepublish": "npm run release && npm version patch",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "mocha-test": "mocha",
+    "test": "npm run mocha-test"
   },
   "keywords": [
     "staged",
@@ -29,6 +30,7 @@
     "path": "^0.12.7",
     "pump": "^1.0.2",
     "require-self": "^0.2.1",
+    "should": "^11.2.1",
     "uglifyjs-webpack-plugin": "^0.4.6",
     "webpack-stream": "^3.2.0"
   },

@@ -1,6 +1,6 @@
 var 吴乐川的执行路线 = require('@wulechuan/apply-one-stage-one-method-pattern');
 
-var 为测试之便不隐藏任何方法函数 = true;
+var 为测试之便不隐藏任何方法函数 = false;
 var 实验对象壹 = new 实验类(为测试之便不隐藏任何方法函数);
 
 // 曝露以下对象和类，以便在浏览器控制台中进一步把玩。
